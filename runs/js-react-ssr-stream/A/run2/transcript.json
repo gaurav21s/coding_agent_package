@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "You are a coding agent. Today's date is 2026-10-12.\nWrite a complete program that works with the latest released version of every library it uses, as installed today.\nDo not use deprecated or removed APIs. If tools are available to you, first use them to look up the current version of each library and its changelog or migration guide, then write the code.\nThe program must run offline, finish on its own, and print its results.\nEnd your reply with exactly one fenced code block that holds the whole program."
+ },
+ {
+  "role": "user",
+  "content": "Using react and react-dom (latest) in a Node ES module with plain JavaScript (React.createElement, no JSX), stream the server-rendered HTML of a small component (a <ul> with 3 <li> items) to process.stdout using a Node.js stream API from react-dom/server, and print 'done' on a new line once the stream has finished.\n\nTarget: Node.js 22, ES module saved as main.mjs, run as `node main.mjs`."
+ },
+ {
+  "role": "assistant",
+  "content": "To stream React components to `stdout` in a Node.js environment using modern APIs, we use `renderToPipeableStream` from `react-dom/server`. This function provides a `pipe` method that can stream the output directly to a `Writable` stream like `process.stdout`.\n\nSince we are using ES modules, we import `React` and `ReactDOMServer` directly. Note that `renderToPipeableStream` is the standard, non-deprecated way to perform server-side rendering in React 18/19.\n\nHere is the `main.mjs` file:\n\n```javascript\nimport React from 'react';\nimport { renderToPipeableStream } from 'react-dom/server';\n\n/**\n * A simple component representing a list of items.\n * Using React.createElement as requested (no JSX).\n */\nconst ListComponent = () => {\n  return React.createElement(\n    'ul',\n    null,\n    React.createElement('li', null, 'Item 1'),\n    React.createElement('li', null, 'Item 2'),\n    React.createElement('li', null, 'Item 3')\n  );\n};\n\n/**\n * Stream the component to process.stdout.\n * renderToPipeableStream returns an object with a pipe method.\n */\nconst stream = renderToPipeableStream(React.createElement(ListComponent), {\n  onAllReady() {\n    // Pipe the stream to stdout\n    stream.pipe(process.stdout);\n    \n    // Since pipe is synchronous in terms of setup, we listen for the \n    // finish event on the stream to print 'done'.\n    process.stdout.on('finish', () => {\n      process.stdout.write('\\ndone\\n');\n    });\n  },\n  onError(error) {\n    console.error(error);\n  }\n});\n```\n\n### How to run:\n1. Ensure you have `react` and `react-dom` installed:\n   `npm install react react-dom`\n2. Save the code above as `main.mjs`.\n3. Run the program:\n   `node main.mjs`\n\nThis will output the HTML string of the `<ul>` list followed by the word \"done\" on a new line."
+ }
+]

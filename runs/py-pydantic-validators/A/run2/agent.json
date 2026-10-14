@@ -1,0 +1,17 @@
+{
+ "agent": "A",
+ "task_id": "py-pydantic-validators",
+ "model": "google/gemini-3.1-flash-lite",
+ "stop_reason": "answered",
+ "code": "from pydantic import BaseModel, Field, EmailStr, field_validator, model_validator, ConfigDict, ValidationError\n\nclass User(BaseModel):\n    # Configure model: forbid extra fields, strip whitespace from strings\n    model_config = ConfigDict(\n        extra='forbid',\n        str_strip_whitespace=True\n    )\n\n    name: str\n    email: str\n    age: int\n\n    # Per-field validator: lowercase the email\n    @field_validator('email')\n    @classmethod\n    def lowercase_email(cls, v: str) -> str:\n        return v.lower()\n\n    # Per-field validator: reject negative ages\n    @field_validator('age')\n    @classmethod\n    def check_positive_age(cls, v: int) -> int:\n        if v < 0:\n            raise ValueError('Age cannot be negative')\n        return v\n\n    # Model-level check: name and email are not identical\n    @model_validator(mode='after')\n    def check_name_not_email(self) -> 'User':\n        if self.name.lower() == self.email.lower():\n            raise ValueError('Name and email cannot be identical')\n        return self\n\ndef main():\n    # 1. Good input\n    good_data = {\n        \"name\": \" Alice \",\n        \"email\": \"ALICE@Example.com\",\n        \"age\": 30\n    }\n    \n    print(\"--- Validating Good Input ---\")\n    try:\n        user = User(**good_data)\n        print(f\"Success: {user}\")\n    except ValidationError as e:\n        print(e)\n\n    # 2. Bad input (Negative age and identical name/email)\n    bad_data = {\n        \"name\": \"bob\",\n        \"email\": \"bob\",\n        \"age\": -5\n    }\n\n    print(\"\\n--- Validating Bad Input ---\")\n    try:\n        User(**bad_data)\n    except ValidationError as e:\n        print(f\"Caught expected validation error:\\n{e}\")\n\nif __name__ == \"__main__\":\n    main()\n",
+ "tool_log": [],
+ "prompt_tokens": 230,
+ "completion_tokens": 565,
+ "cost_usd": 0.000905,
+ "llm_calls": 1,
+ "tool_calls": 0,
+ "tool_errors": 0,
+ "bd_requests": 0,
+ "bd_cache_hits": 0,
+ "latency_s": 2.42
+}

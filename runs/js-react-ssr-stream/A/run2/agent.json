@@ -1,0 +1,17 @@
+{
+ "agent": "A",
+ "task_id": "js-react-ssr-stream",
+ "model": "google/gemini-3.1-flash-lite",
+ "stop_reason": "answered",
+ "code": "import React from 'react';\nimport { renderToPipeableStream } from 'react-dom/server';\n\n/**\n * A simple component representing a list of items.\n * Using React.createElement as requested (no JSX).\n */\nconst ListComponent = () => {\n  return React.createElement(\n    'ul',\n    null,\n    React.createElement('li', null, 'Item 1'),\n    React.createElement('li', null, 'Item 2'),\n    React.createElement('li', null, 'Item 3')\n  );\n};\n\n/**\n * Stream the component to process.stdout.\n * renderToPipeableStream returns an object with a pipe method.\n */\nconst stream = renderToPipeableStream(React.createElement(ListComponent), {\n  onAllReady() {\n    // Pipe the stream to stdout\n    stream.pipe(process.stdout);\n    \n    // Since pipe is synchronous in terms of setup, we listen for the \n    // finish event on the stream to print 'done'.\n    process.stdout.on('finish', () => {\n      process.stdout.write('\\ndone\\n');\n    });\n  },\n  onError(error) {\n    console.error(error);\n  }\n});\n",
+ "tool_log": [],
+ "prompt_tokens": 226,
+ "completion_tokens": 498,
+ "cost_usd": 0.0008035,
+ "llm_calls": 1,
+ "tool_calls": 0,
+ "tool_errors": 0,
+ "bd_requests": 0,
+ "bd_cache_hits": 0,
+ "latency_s": 2.33
+}

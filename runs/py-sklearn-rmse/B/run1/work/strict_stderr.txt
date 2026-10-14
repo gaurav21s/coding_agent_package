@@ -1,0 +1,15 @@
+Traceback (most recent call last):
+  File "/Users/Admin/Documents/New project/coding_agent_package/runs/py-sklearn-rmse/B/run1/work/main.py", line 37, in <module>
+    main()
+  File "/Users/Admin/Documents/New project/coding_agent_package/runs/py-sklearn-rmse/B/run1/work/main.py", line 32, in main
+    rmse = mean_squared_error(y_test, y_pred, squared=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/Admin/Documents/New project/coding_agent_package/sandbox/py/lib/python3.11/site-packages/sklearn/utils/_param_validation.py", line 196, in wrapper
+    params = func_sig.bind(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.11/3.11.10/Frameworks/Python.framework/Versions/3.11/lib/python3.11/inspect.py", line 3195, in bind
+    return self._bind(args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.11/3.11.10/Frameworks/Python.framework/Versions/3.11/lib/python3.11/inspect.py", line 3184, in _bind
+    raise TypeError(
+TypeError: got an unexpected keyword argument 'squared'

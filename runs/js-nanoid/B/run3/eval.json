@@ -1,0 +1,29 @@
+{
+ "code_extracted": true,
+ "deprecated_static": 2,
+ "deprecated_static_items": {
+  "nanoid/async": 2
+ },
+ "runs": false,
+ "timeout": false,
+ "strict_runs": false,
+ "strict_failed_on_deprecation": false,
+ "deprecated_runtime": 1,
+ "deprecation_warnings": [],
+ "removed_api_errors": 1,
+ "hallucinated": 0,
+ "hallucinated_symbols": [],
+ "removed_api_symbols": [
+  {
+   "symbol": "nanoid/async",
+   "missing": "nanoid/async",
+   "kind": "module",
+   "error": "ERR_PACKAGE_PATH_NOT_EXPORTED: Package subpath './async' is not defined by \"exports\" in /Users/Admin/Documents/New project/coding_agent_package/sandbox/node/node_modules/nanoid/package.json imported from /Users/Admin/Documents/New "
+  }
+ ],
+ "error_type": "ERR_PACKAGE_PATH_NOT_EXPORTED",
+ "error_message": "Package subpath './async' is not defined by \"exports\" in /Users/Admin/Documents/New project/coding_agent_package/sandbox/node/node_modules/nanoid/package.json imported from /Users/Admin/Documents/New project/coding_agent_package/sandbox/node/work/js-nanoid/B/run3/work/main.mjs",
+ "gt_items_hit": [
+  "nanoid/async"
+ ]
+}

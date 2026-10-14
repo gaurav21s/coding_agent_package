@@ -1,0 +1,3 @@
+Simpson's rule integral: 0.3333333333333333
+Trapezoidal rule integral: 0.33335000000000004
+Last value of cumulative trapezoidal integral: 0.33335000000000004

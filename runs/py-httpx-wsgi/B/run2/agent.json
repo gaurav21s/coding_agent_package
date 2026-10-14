@@ -1,0 +1,85 @@
+{
+ "agent": "B",
+ "task_id": "py-httpx-wsgi",
+ "model": "google/gemini-3.1-flash-lite",
+ "stop_reason": "answered",
+ "code": "import httpx\n\ndef simple_wsgi_app(environ, start_response):\n    \"\"\"\n    A minimal WSGI application that returns 'hello' with status 200.\n    \"\"\"\n    status = '200 OK'\n    headers = [('Content-type', 'text/plain; charset=utf-8')]\n    start_response(status, headers)\n    return [b'hello']\n\ndef main():\n    # Create the WSGI transport using our application\n    transport = httpx.WSGITransport(app=simple_wsgi_app)\n\n    # Use the transport with an httpx.Client.\n    # The base_url is required for the client to know where to route requests.\n    with httpx.Client(transport=transport, base_url=\"http://testserver\") as client:\n        response = client.get(\"/\")\n\n        # Print the results\n        print(f\"Status Code: {response.status_code}\")\n        print(f\"Body: {response.text}\")\n\nif __name__ == \"__main__\":\n    main()\n",
+ "tool_log": [
+  {
+   "tool": "run_scraper",
+   "args": {
+    "input": [
+     {
+      "package_name": "httpx"
+     }
+    ],
+    "dataset_id": "gd_mk57m0301khq4jmsul",
+    "method": "collect_by_url"
+   },
+   "page": 0,
+   "cached": true,
+   "live_requests": 0,
+   "is_error": false,
+   "chars": 2944
+  },
+  {
+   "tool": "run_scraper",
+   "args": {
+    "method": "collect_by_url",
+    "input": [
+     {
+      "package_name": "httpx"
+     }
+    ],
+    "dataset_id": "gd_mk57kc3t1wwgmnepp9"
+   },
+   "page": 0,
+   "cached": true,
+   "live_requests": 0,
+   "is_error": false,
+   "chars": 826
+  },
+  {
+   "tool": "scrape_as_markdown",
+   "args": {
+    "url": "https://www.python-httpx.org/advanced/#wsgi-applications"
+   },
+   "page": 0,
+   "cached": true,
+   "live_requests": 0,
+   "is_error": false,
+   "chars": 1987
+  },
+  {
+   "tool": "discover",
+   "args": {
+    "query": "httpx WSGI application in-process testing example"
+   },
+   "page": 0,
+   "cached": false,
+   "live_requests": 1,
+   "is_error": true,
+   "chars": 701
+  },
+  {
+   "tool": "scrape_as_markdown",
+   "args": {
+    "url": "https://www.python-httpx.org/advanced/transports/"
+   },
+   "page": 0,
+   "cached": false,
+   "live_requests": 1,
+   "is_error": false,
+   "chars": 17545
+  }
+ ],
+ "prompt_tokens": 15286,
+ "completion_tokens": 563,
+ "cost_usd": 0.004666,
+ "llm_calls": 6,
+ "tool_calls": 5,
+ "tool_errors": 1,
+ "bd_requests": 2,
+ "bd_cache_hits": 3,
+ "latency_s": 14.13
+}

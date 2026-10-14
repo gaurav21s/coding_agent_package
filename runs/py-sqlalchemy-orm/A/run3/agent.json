@@ -1,0 +1,17 @@
+{
+ "agent": "A",
+ "task_id": "py-sqlalchemy-orm",
+ "model": "google/gemini-3.1-flash-lite",
+ "stop_reason": "answered",
+ "code": "import sqlalchemy\nfrom sqlalchemy import create_engine, String, select, text\nfrom sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, Session\n\n# 1. Define the Declarative Base\nclass Base(DeclarativeBase):\n    pass\n\n# 2. Define the Book model\nclass Book(Base):\n    __tablename__ = \"book\"\n    \n    id: Mapped[int] = mapped_column(primary_key=True)\n    title: Mapped[str] = mapped_column(String(100))\n    author: Mapped[str] = mapped_column(String(100))\n\n    def __repr__(self):\n        return f\"Book(id={self.id!r}, title={self.title!r}, author={self.author!r})\"\n\ndef main():\n    # 3. Create the engine (in-memory SQLite)\n    engine = create_engine(\"sqlite:///:memory:\")\n\n    # 4. Create the table\n    Base.metadata.create_all(engine)\n\n    # 5. Insert two books\n    with Session(engine) as session:\n        book1 = Book(title=\"The Great Gatsby\", author=\"F. Scott Fitzgerald\")\n        book2 = Book(title=\"1984\", author=\"George Orwell\")\n        session.add_all([book1, book2])\n        session.commit()\n\n    # 6. Fetch one book by its primary key\n    with Session(engine) as session:\n        stmt = select(Book).where(Book.id == 1)\n        fetched_book = session.scalar(stmt)\n        print(f\"Fetched Book: {fetched_book}\")\n\n    # 7. Run a raw SQL statement to count rows\n    with engine.connect() as connection:\n        result = connection.execute(text(\"SELECT COUNT(*) FROM book\"))\n        count = result.scalar()\n        print(f\"Total Row Count (via raw SQL): {count}\")\n\nif __name__ == \"__main__\":\n    main()\n",
+ "tool_log": [],
+ "prompt_tokens": 205,
+ "completion_tokens": 553,
+ "cost_usd": 0.00088075,
+ "llm_calls": 1,
+ "tool_calls": 0,
+ "tool_errors": 0,
+ "bd_requests": 0,
+ "bd_cache_hits": 0,
+ "latency_s": 3.83
+}

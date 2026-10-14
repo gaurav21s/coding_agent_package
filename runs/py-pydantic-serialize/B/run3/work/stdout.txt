@@ -1,0 +1,5 @@
+Order 1 (from dict): id=1 items=['apple', 'banana'] total=10.5
+Order 2 (from JSON): id=2 items=['orange', 'grape'] total=20.0
+Order 1 Copy (modified): id=1 items=['apple', 'banana'] total=99.5
+Copy as dict: {'id': 1, 'items': ['apple', 'banana'], 'total': 99.5}
+Copy as JSON: {"id":1,"items":["apple","banana"],"total":99.5}

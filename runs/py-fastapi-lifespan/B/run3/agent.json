@@ -1,0 +1,35 @@
+{
+ "agent": "B",
+ "task_id": "py-fastapi-lifespan",
+ "model": "google/gemini-3.1-flash-lite",
+ "stop_reason": "answered",
+ "code": "import contextlib\nfrom fastapi import FastAPI\nfrom fastapi.testclient import TestClient\n\n# In-memory storage for our 'model'\nmodel = {}\n\n@contextlib.asynccontextmanager\nasync def lifespan(app: FastAPI):\n    # Startup: Load the model\n    print(\"Application starting up: Loading model...\")\n    model[\"factor\"] = 2\n    yield\n    # Shutdown: Clear the model\n    print(\"Application shutting down: Clearing model...\")\n    model.clear()\n\napp = FastAPI(lifespan=lifespan)\n\n@app.get(\"/predict\")\ndef predict(x: int):\n    # Access the model factor\n    factor = model.get(\"factor\", 0)\n    return {\"result\": x * factor}\n\ndef run_test():\n    # TestClient acts as a context manager that triggers lifespan events\n    with TestClient(app) as client:\n        print(\"Testing /predict?x=3...\")\n        response = client.get(\"/predict?x=3\")\n        print(f\"Response JSON: {response.json()}\")\n\nif __name__ == \"__main__\":\n    run_test()\n",
+ "tool_log": [
+  {
+   "tool": "run_scraper",
+   "args": {
+    "method": "collect_by_url",
+    "dataset_id": "gd_mk57kc3t1wwgmnepp9",
+    "input": [
+     {
+      "package_name": "fastapi"
+     }
+    ]
+   },
+   "page": 0,
+   "cached": true,
+   "live_requests": 0,
+   "is_error": false,
+   "chars": 15607
+  }
+ ],
+ "prompt_tokens": 5007,
+ "completion_tokens": 508,
+ "cost_usd": 0.001158075,
+ "llm_calls": 2,
+ "tool_calls": 1,
+ "tool_errors": 0,
+ "bd_requests": 0,
+ "bd_cache_hits": 1,
+ "latency_s": 3.58
+}

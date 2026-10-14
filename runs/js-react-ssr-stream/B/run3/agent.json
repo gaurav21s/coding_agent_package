@@ -1,0 +1,38 @@
+{
+ "agent": "B",
+ "task_id": "js-react-ssr-stream",
+ "model": "google/gemini-3.1-flash-lite",
+ "stop_reason": "answered",
+ "code": "import React from 'react';\nimport { renderToPipeableStream } from 'react-dom/server';\n\n/**\n * A simple component that renders a <ul> with 3 <li> items.\n * Using React.createElement instead of JSX.\n */\nfunction ListComponent() {\n  return React.createElement(\n    'ul',\n    null,\n    React.createElement('li', null, 'Item 1'),\n    React.createElement('li', null, 'Item 2'),\n    React.createElement('li', null, 'Item 3')\n  );\n}\n\n// Create the stream\nconst stream = renderToPipeableStream(React.createElement(ListComponent), {\n  onShellReady() {\n    // Pipe the stream to process.stdout\n    stream.pipe(process.stdout);\n  },\n  onAllReady() {\n    // Once the stream has finished, print 'done'\n    process.stdout.write('\\ndone\\n');\n  },\n  onError(error) {\n    console.error(error);\n  }\n});\n",
+ "tool_log": [
+  {
+   "tool": "run_scraper",
+   "args": {
+    "input": [
+     {
+      "package_name": "react"
+     },
+     {
+      "package_name": "react-dom"
+     }
+    ],
+    "dataset_id": "gd_mk57m0301khq4jmsul",
+    "method": "collect_by_url"
+   },
+   "page": 0,
+   "cached": true,
+   "live_requests": 0,
+   "is_error": false,
+   "chars": 3155
+  }
+ ],
+ "prompt_tokens": 2751,
+ "completion_tokens": 401,
+ "cost_usd": 0.00128925,
+ "llm_calls": 2,
+ "tool_calls": 1,
+ "tool_errors": 0,
+ "bd_requests": 0,
+ "bd_cache_hits": 1,
+ "latency_s": 3.49
+}

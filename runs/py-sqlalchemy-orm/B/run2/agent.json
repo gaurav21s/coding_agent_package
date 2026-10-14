@@ -1,0 +1,35 @@
+{
+ "agent": "B",
+ "task_id": "py-sqlalchemy-orm",
+ "model": "google/gemini-3.1-flash-lite",
+ "stop_reason": "answered",
+ "code": "from sqlalchemy import create_engine, String, Integer, text\nfrom sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, Session\n\n# 1. Setup the engine for an in-memory SQLite database\nengine = create_engine(\"sqlite:///:memory:\", echo=False)\n\n# 2. Define the Declarative Base\nclass Base(DeclarativeBase):\n    pass\n\n# 3. Define the Book model\nclass Book(Base):\n    __tablename__ = \"book\"\n    \n    id: Mapped[int] = mapped_column(primary_key=True)\n    title: Mapped[str] = mapped_column(String(100))\n    author: Mapped[str] = mapped_column(String(100))\n\n    def __repr__(self):\n        return f\"Book(id={self.id!r}, title={self.title!r}, author={self.author!r})\"\n\n# 4. Create the table\nBase.metadata.create_all(engine)\n\n# 5. Insert two books\nwith Session(engine) as session:\n    book1 = Book(title=\"The Great Gatsby\", author=\"F. Scott Fitzgerald\")\n    book2 = Book(title=\"1984\", author=\"George Orwell\")\n    session.add_all([book1, book2])\n    session.commit()\n\n# 6. Fetch one book by its primary key\nwith Session(engine) as session:\n    fetched_book = session.get(Book, 1)\n    print(f\"Fetched book: {fetched_book}\")\n\n    # 7. Run a raw SQL statement to count rows\n    # We use the engine directly to execute raw SQL\n    with engine.connect() as connection:\n        result = connection.execute(text(\"SELECT count(*) FROM book\"))\n        count = result.scalar()\n        print(f\"Total row count (via raw SQL): {count}\")\n",
+ "tool_log": [
+  {
+   "tool": "run_scraper",
+   "args": {
+    "dataset_id": "gd_mk57kc3t1wwgmnepp9",
+    "input": [
+     {
+      "package_name": "sqlalchemy"
+     }
+    ],
+    "method": "collect_by_url"
+   },
+   "page": 0,
+   "cached": true,
+   "live_requests": 0,
+   "is_error": false,
+   "chars": 7210
+  }
+ ],
+ "prompt_tokens": 3402,
+ "completion_tokens": 562,
+ "cost_usd": 0.0016935000000000001,
+ "llm_calls": 2,
+ "tool_calls": 1,
+ "tool_errors": 0,
+ "bd_requests": 0,
+ "bd_cache_hits": 1,
+ "latency_s": 4.47
+}

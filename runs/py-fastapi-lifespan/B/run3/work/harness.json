@@ -1,0 +1,1 @@
+{"exit": "ok", "exception": null, "warnings": [{"category": "StarletteDeprecationWarning", "deprecation": false, "message": "Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.", "filename": "/Users/Admin/Documents/New project/coding_agent_package/sandbox/py/lib/python3.11/site-packages/fastapi/testclient.py", "lineno": 1, "in_script": false}]}

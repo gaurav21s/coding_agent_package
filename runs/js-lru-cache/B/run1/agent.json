@@ -1,0 +1,35 @@
+{
+ "agent": "B",
+ "task_id": "js-lru-cache",
+ "model": "google/gemini-3.1-flash-lite",
+ "stop_reason": "answered",
+ "code": "import { LRUCache } from 'lru-cache';\n\n// Initialize cache with max 100 entries and 50ms TTL.\n// ttlAutopurge: true ensures items are removed automatically after the TTL.\nconst cache = new LRUCache({\n  max: 100,\n  ttl: 50,\n  ttlAutopurge: true,\n});\n\nasync function run() {\n  console.log(`Initial cache size: ${cache.size}`);\n\n  // Set two keys\n  cache.set('key1', 'value1');\n  cache.set('key2', 'value2');\n  console.log(`Cache size after setting two keys: ${cache.size}`);\n\n  // Remove one key explicitly\n  cache.delete('key1');\n  console.log(`Cache size after deleting 'key1': ${cache.size}`);\n\n  // Wait 80ms (longer than the 50ms TTL)\n  await new Promise((resolve) => setTimeout(resolve, 80));\n\n  // Check the other key\n  console.log(`Cache size after waiting 80ms: ${cache.size}`);\n  console.log(`'key2' exists: ${cache.has('key2')}`);\n\n  // Empty the cache completely\n  cache.clear();\n  console.log(`Cache size after clearing: ${cache.size}`);\n}\n\nrun().catch(console.error);\n",
+ "tool_log": [
+  {
+   "tool": "run_scraper",
+   "args": {
+    "dataset_id": "gd_mk57m0301khq4jmsul",
+    "input": [
+     {
+      "package_name": "lru-cache"
+     }
+    ],
+    "method": "collect_by_url"
+   },
+   "page": 0,
+   "cached": false,
+   "live_requests": 1,
+   "is_error": false,
+   "chars": 15866
+  }
+ ],
+ "prompt_tokens": 5005,
+ "completion_tokens": 551,
+ "cost_usd": 0.00207775,
+ "llm_calls": 2,
+ "tool_calls": 1,
+ "tool_errors": 0,
+ "bd_requests": 1,
+ "bd_cache_hits": 0,
+ "latency_s": 8.95
+}

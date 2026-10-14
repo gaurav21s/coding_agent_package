@@ -1,0 +1,35 @@
+{
+ "agent": "B",
+ "task_id": "js-zod-validate",
+ "model": "google/gemini-3.1-flash-lite",
+ "stop_reason": "answered",
+ "code": "import { z } from 'zod';\n\n// 1. Define the signup schema\nconst signupSchema = z.object({\n  email: z.string().email(\"Invalid email address\"),\n  password: z.string().min(8, \"Password must be at least 8 characters\"),\n  age: z.number().int().min(13).optional(),\n});\n\n// 2. Define the admin schema by extending the signup schema\nconst adminSchema = signupSchema.extend({\n  role: z.enum(['admin', 'user']),\n});\n\n// --- Parsing Logic ---\n\nconst validData = {\n  email: \"test@example.com\",\n  password: \"securePassword123\",\n  age: 25,\n};\n\nconst invalidData = {\n  email: \"not-an-email\",\n  password: \"short\",\n  age: 10, // Too young\n};\n\nconsole.log(\"--- Parsing Valid Data ---\");\nconst validResult = signupSchema.safeParse(validData);\nconsole.log(\"Success:\", validResult.success);\nconsole.log(\"Data:\", validResult.data);\n\nconsole.log(\"\\n--- Parsing Invalid Data ---\");\nconst invalidResult = signupSchema.safeParse(invalidData);\n\nif (!invalidResult.success) {\n  console.log(\"Validation failed. Issues:\");\n  \n  // Print every issue's path and message\n  invalidResult.error.issues.forEach((issue) => {\n    console.log(`- Path [${issue.path.join('.')}]: ${issue.message}`);\n  });\n\n  // Print errors grouped per field\n  console.log(\"\\nErrors grouped per field:\");\n  console.log(invalidResult.error.flatten().fieldErrors);\n}\n\nconsole.log(\"\\n--- Parsing Admin Data ---\");\nconst adminData = {\n  email: \"admin@example.com\",\n  password: \"adminPassword123\",\n  role: \"admin\",\n};\n\nconst adminResult = adminSchema.safeParse(adminData);\nconsole.log(\"Admin Success:\", adminResult.success);\nconsole.log(\"Admin Data:\", adminResult.data);\n",
+ "tool_log": [
+  {
+   "tool": "run_scraper",
+   "args": {
+    "input": [
+     {
+      "package_name": "zod"
+     }
+    ],
+    "method": "collect_by_url",
+    "dataset_id": "gd_mk57m0301khq4jmsul"
+   },
+   "page": 0,
+   "cached": true,
+   "live_requests": 0,
+   "is_error": false,
+   "chars": 6314
+  }
+ ],
+ "prompt_tokens": 3554,
+ "completion_tokens": 654,
+ "cost_usd": 0.0018695,
+ "llm_calls": 2,
+ "tool_calls": 1,
+ "tool_errors": 0,
+ "bd_requests": 0,
+ "bd_cache_hits": 1,
+ "latency_s": 3.92
+}

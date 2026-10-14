@@ -1,0 +1,63 @@
+{
+ "agent": "B",
+ "task_id": "py-pydantic-serialize",
+ "model": "google/gemini-3.1-flash-lite",
+ "stop_reason": "answered",
+ "code": "import json\nfrom pydantic import BaseModel\n\n# Define the Order model\nclass Order(BaseModel):\n    id: int\n    items: list[str]\n    total: float\n\ndef main():\n    # 1. Build one Order from a Python dict\n    order_dict_data = {\"id\": 1, \"items\": [\"apple\", \"banana\"], \"total\": 10.5}\n    order1 = Order(**order_dict_data)\n    print(f\"Order 1 (from dict): {order1}\")\n\n    # 2. Build another Order from a JSON string\n    order_json_str = '{\"id\": 2, \"items\": [\"orange\", \"grape\"], \"total\": 20.0}'\n    order2 = Order.model_validate_json(order_json_str)\n    print(f\"Order 2 (from JSON): {order2}\")\n\n    # 3. Make a copy of the first order with total changed to 99.5\n    # model_copy allows updating fields during the copy process\n    order1_copy = order1.model_copy(update={\"total\": 99.5})\n    print(f\"Order 1 Copy (modified): {order1_copy}\")\n\n    # 4. Print the copy as a Python dict\n    print(f\"Copy as dict: {order1_copy.model_dump()}\")\n\n    # 5. Print the copy as a JSON string\n    print(f\"Copy as JSON: {order1_copy.model_dump_json()}\")\n\nif __name__ == \"__main__\":\n    main()\n",
+ "tool_log": [
+  {
+   "tool": "run_scraper",
+   "args": {
+    "method": "collect_by_url",
+    "dataset_id": "gd_mk57kc3t1wwgmnepp9",
+    "input": [
+     {
+      "package_name": "pydantic"
+     }
+    ]
+   },
+   "page": 0,
+   "cached": true,
+   "live_requests": 0,
+   "is_error": false,
+   "chars": 831
+  },
+  {
+   "tool": "run_scraper",
+   "args": {
+    "dataset_id": "gd_mk57kc3t1wwgmnepp9",
+    "input": [
+     {
+      "package_name": "pydantic"
+     }
+    ],
+    "method": "collect_by_url"
+   },
+   "page": 0,
+   "cached": true,
+   "live_requests": 0,
+   "is_error": false,
+   "chars": 831
+  },
+  {
+   "tool": "scrape_as_markdown",
+   "args": {
+    "url": "https://docs.pydantic.dev/latest/"
+   },
+   "page": 0,
+   "cached": false,
+   "live_requests": 1,
+   "is_error": false,
+   "chars": 18127
+  }
+ ],
+ "prompt_tokens": 8220,
+ "completion_tokens": 591,
+ "cost_usd": 0.0029415,
+ "llm_calls": 4,
+ "tool_calls": 3,
+ "tool_errors": 0,
+ "bd_requests": 1,
+ "bd_cache_hits": 2,
+ "latency_s": 21.36
+}

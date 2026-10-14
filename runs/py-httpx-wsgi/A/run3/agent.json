@@ -1,0 +1,17 @@
+{
+ "agent": "A",
+ "task_id": "py-httpx-wsgi",
+ "model": "google/gemini-3.1-flash-lite",
+ "stop_reason": "answered",
+ "code": "import httpx\n\ndef simple_wsgi_app(environ, start_response):\n    \"\"\"\n    A minimal WSGI application that returns 'hello' with a 200 OK status.\n    \"\"\"\n    status = '200 OK'\n    headers = [('Content-type', 'text/plain; charset=utf-8')]\n    start_response(status, headers)\n    return [b'hello']\n\ndef main():\n    # Create a transport that routes requests to the WSGI app\n    transport = httpx.WSGITransport(app=simple_wsgi_app)\n\n    # Use the synchronous client with the custom transport\n    with httpx.Client(transport=transport, base_url=\"http://testserver\") as client:\n        response = client.get(\"/\")\n\n        # Print the results\n        print(f\"Status Code: {response.status_code}\")\n        print(f\"Body: {response.text}\")\n\nif __name__ == \"__main__\":\n    main()\n",
+ "tool_log": [],
+ "prompt_tokens": 201,
+ "completion_tokens": 337,
+ "cost_usd": 0.00055575,
+ "llm_calls": 1,
+ "tool_calls": 0,
+ "tool_errors": 0,
+ "bd_requests": 0,
+ "bd_cache_hits": 0,
+ "latency_s": 2.13
+}

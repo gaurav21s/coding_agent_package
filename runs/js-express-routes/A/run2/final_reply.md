@@ -1,0 +1,47 @@
+To implement this, we use `express` (currently version 4.21.1). Since we need to perform requests against the server within the same process, we use the native `fetch` API available in Node.js 22. We use `server.address().port` to dynamically determine the port assigned by the OS when listening on port 0.
+
+```javascript
+import express from 'express';
+
+const app = express();
+
+// DELETE /users/:id
+app.delete('/users/:id', (req, res) => {
+  res.status(204).send();
+});
+
+// GET /search
+app.get('/search', (req, res) => {
+  res.json({ q: req.query.q });
+});
+
+// Catch-all for GET requests
+app.get('*', (req, res) => {
+  res.status(404).send('not found');
+});
+
+const server = app.listen(0, async () => {
+  const port = server.address().port;
+  const baseUrl = `http://localhost:${port}`;
+
+  try {
+    // 1. DELETE /users/7
+    const res1 = await fetch(`${baseUrl}/users/7`, { method: 'DELETE' });
+    console.log(`DELETE /users/7: ${res1.status}`);
+
+    // 2. GET /search?q=x
+    const res2 = await fetch(`${baseUrl}/search?q=x`);
+    const body2 = await res2.json();
+    console.log(`GET /search?q=x: ${res2.status}, ${JSON.stringify(body2)}`);
+
+    // 3. GET /nope
+    const res3 = await fetch(`${baseUrl}/nope`);
+    const body3 = await res3.text();
+    console.log(`GET /nope: ${res3.status}, ${body3}`);
+  } catch (err) {
+    console.error('Error during fetch:', err);
+  } finally {
+    server.close();
+  }
+});
+```

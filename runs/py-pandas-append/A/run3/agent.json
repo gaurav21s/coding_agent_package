@@ -1,0 +1,17 @@
+{
+ "agent": "A",
+ "task_id": "py-pandas-append",
+ "model": "google/gemini-3.1-flash-lite",
+ "stop_reason": "answered",
+ "code": "import pandas as pd\n\ndef main():\n    # Initialize an empty DataFrame with the specified columns\n    df = pd.DataFrame(columns=['name', 'score'])\n\n    # Data to be added\n    new_rows = [\n        {'name': 'Alice', 'score': 85},\n        {'name': 'Bob', 'score': 92},\n        {'name': 'Charlie', 'score': 78}\n    ]\n\n    # Adding rows one at a time in a loop\n    for row in new_rows:\n        # pd.concat is the modern, non-deprecated way to add rows\n        # We create a single-row DataFrame from the dict\n        new_df = pd.DataFrame([row])\n        df = pd.concat([df, new_df], ignore_index=True)\n\n    # Ensure the score column is numeric for calculation\n    df['score'] = pd.to_numeric(df['score'])\n\n    # Print the final DataFrame\n    print(\"Final DataFrame:\")\n    print(df)\n    print(\"-\" * 20)\n\n    # Calculate and print the mean score\n    mean_score = df['score'].mean()\n    print(f\"Mean Score: {mean_score}\")\n\nif __name__ == \"__main__\":\n    main()\n",
+ "tool_log": [],
+ "prompt_tokens": 182,
+ "completion_tokens": 673,
+ "cost_usd": 0.001055,
+ "llm_calls": 1,
+ "tool_calls": 0,
+ "tool_errors": 0,
+ "bd_requests": 0,
+ "bd_cache_hits": 0,
+ "latency_s": 2.38
+}

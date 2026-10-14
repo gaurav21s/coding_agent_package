@@ -1,0 +1,24 @@
+--- Valid Parsing ---
+Success: true
+
+--- Invalid Parsing ---
+Individual Issues:
+Path: email, Message: Invalid email address
+Path: password, Message: Password must be at least 8 characters long
+Path: age, Message: Must be at least 13 years old
+
+Errors grouped by field:
+{
+  email: [ 'Invalid email address' ],
+  password: [ 'Password must be at least 8 characters long' ],
+  age: [ 'Must be at least 13 years old' ]
+}
+
+--- Admin Parsing ---
+Admin Success: true
+Admin Data: {
+  email: 'admin@example.com',
+  password: 'adminPassword123',
+  age: 30,
+  role: 'admin'
+}

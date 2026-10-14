@@ -1,0 +1,17 @@
+{
+ "agent": "A",
+ "task_id": "py-polars-groupby",
+ "model": "google/gemini-3.1-flash-lite",
+ "stop_reason": "answered",
+ "code": "import polars as pl\n\ndef categorize_size(amount: float) -> str:\n    \"\"\"Custom function to categorize sales amount.\"\"\"\n    return \"big\" if amount > 100 else \"small\"\n\ndef main():\n    # 1. Build the DataFrame\n    data = {\n        \"region\": [\"North\", \"South\", \"North\", \"East\", \"South\", \"West\"],\n        \"product\": [\"A\", \"B\", \"C\", \"A\", \"B\", \"C\"],\n        \"amount\": [150.0, 80.0, 120.0, 200.0, 50.0, 95.0]\n    }\n    df = pl.DataFrame(data)\n\n    # 2. Compute total and mean amount per region, sorted by region\n    region_stats = (\n        df.group_by(\"region\")\n        .agg([\n            pl.col(\"amount\").sum().alias(\"total_amount\"),\n            pl.col(\"amount\").mean().alias(\"mean_amount\")\n        ])\n        .sort(\"region\")\n    )\n\n    print(\"--- Aggregated Stats per Region ---\")\n    print(region_stats)\n    print(\"\\n\")\n\n    # 3. Add 'size' column using the custom function\n    # We use map_elements with return_dtype to ensure type safety\n    df_with_size = df.with_columns(\n        pl.col(\"amount\")\n        .map_elements(categorize_size, return_dtype=pl.String)\n        .alias(\"size\")\n    )\n\n    print(\"--- Original DataFrame with 'size' column ---\")\n    print(df_with_size)\n\nif __name__ == \"__main__\":\n    main()\n",
+ "tool_log": [],
+ "prompt_tokens": 216,
+ "completion_tokens": 484,
+ "cost_usd": 0.00078,
+ "llm_calls": 1,
+ "tool_calls": 0,
+ "tool_errors": 0,
+ "bd_requests": 0,
+ "bd_cache_hits": 0,
+ "latency_s": 2.46
+}

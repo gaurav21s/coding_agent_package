@@ -1,0 +1,19 @@
+/Users/Admin/Documents/New project/coding_agent_package/sandbox/node/node_modules/path-to-regexp/dist/index.js:108
+                    throw new PathError(`Missing parameter name at index ${index}`, str);
+                          ^
+
+PathError [TypeError]: Missing parameter name at index 1: *; visit https://git.new/pathToRegexpError for info
+    at consumeUntil (/Users/Admin/Documents/New project/coding_agent_package/sandbox/node/node_modules/path-to-regexp/dist/index.js:108:27)
+    at parse (/Users/Admin/Documents/New project/coding_agent_package/sandbox/node/node_modules/path-to-regexp/dist/index.js:140:26)
+    at process (/Users/Admin/Documents/New project/coding_agent_package/sandbox/node/node_modules/path-to-regexp/dist/index.js:263:56)
+    at pathToRegexp (/Users/Admin/Documents/New project/coding_agent_package/sandbox/node/node_modules/path-to-regexp/dist/index.js:274:5)
+    at Object.match (/Users/Admin/Documents/New project/coding_agent_package/sandbox/node/node_modules/path-to-regexp/dist/index.js:225:30)
+    at matcher (/Users/Admin/Documents/New project/coding_agent_package/sandbox/node/node_modules/router/lib/layer.js:86:23)
+    at new Layer (/Users/Admin/Documents/New project/coding_agent_package/sandbox/node/node_modules/router/lib/layer.js:93:62)
+    at Function.route (/Users/Admin/Documents/New project/coding_agent_package/sandbox/node/node_modules/router/index.js:428:17)
+    at Function.route (/Users/Admin/Documents/New project/coding_agent_package/sandbox/node/node_modules/express/lib/application.js:257:22)
+    at app.<computed> [as get] (/Users/Admin/Documents/New project/coding_agent_package/sandbox/node/node_modules/express/lib/application.js:478:22) {
+  originalPath: '*'
+}
+
+Node.js v22.16.0

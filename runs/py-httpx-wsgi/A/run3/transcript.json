@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "You are a coding agent. Today's date is 2026-10-12.\nWrite a complete program that works with the latest released version of every library it uses, as installed today.\nDo not use deprecated or removed APIs. If tools are available to you, first use them to look up the current version of each library and its changelog or migration guide, then write the code.\nThe program must run offline, finish on its own, and print its results.\nEnd your reply with exactly one fenced code block that holds the whole program."
+ },
+ {
+  "role": "user",
+  "content": "Using httpx (synchronous client), test a tiny WSGI application in-process without starting a server. Define a plain WSGI app that returns the body 'hello' with status 200, send a GET request to it through an httpx.Client, and print the status code and the body.\n\nTarget: Python 3.11, run as `python main.py`."
+ },
+ {
+  "role": "assistant",
+  "content": "To test a WSGI application in-process using `httpx`, we use the `httpx.Client` with a custom `transport`. The `httpx.WSGITransport` class allows us to pass a WSGI application directly, which handles the request-response cycle without opening a network socket.\n\nAs of October 2026, `httpx` remains the standard for this approach. The following code defines a simple WSGI application and uses `httpx.WSGITransport` to execute the request in-process.\n\n```python\nimport httpx\n\ndef simple_wsgi_app(environ, start_response):\n    \"\"\"\n    A minimal WSGI application that returns 'hello' with a 200 OK status.\n    \"\"\"\n    status = '200 OK'\n    headers = [('Content-type', 'text/plain; charset=utf-8')]\n    start_response(status, headers)\n    return [b'hello']\n\ndef main():\n    # Create a transport that routes requests to the WSGI app\n    transport = httpx.WSGITransport(app=simple_wsgi_app)\n\n    # Use the synchronous client with the custom transport\n    with httpx.Client(transport=transport, base_url=\"http://testserver\") as client:\n        response = client.get(\"/\")\n\n        # Print the results\n        print(f\"Status Code: {response.status_code}\")\n        print(f\"Body: {response.text}\")\n\nif __name__ == \"__main__\":\n    main()\n```"
+ }
+]

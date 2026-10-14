@@ -1,0 +1,52 @@
+{
+ "agent": "B",
+ "task_id": "py-polars-groupby",
+ "model": "google/gemini-3.1-flash-lite",
+ "stop_reason": "answered",
+ "code": "import polars as pl\n\ndef categorize_amount(amount: float) -> str:\n    \"\"\"Custom function to categorize sales amount.\"\"\"\n    return \"big\" if amount > 100 else \"small\"\n\ndef main():\n    # 1. Build the DataFrame\n    data = {\n        \"region\": [\"North\", \"South\", \"North\", \"East\", \"South\", \"West\"],\n        \"product\": [\"A\", \"B\", \"C\", \"A\", \"B\", \"C\"],\n        \"amount\": [50.0, 150.0, 200.0, 80.0, 30.0, 120.0]\n    }\n    df = pl.DataFrame(data)\n    \n    print(\"Original DataFrame:\")\n    print(df)\n    print(\"-\" * 30)\n\n    # 2. Compute total and mean amount per region, sorted by region\n    region_stats = (\n        df.group_by(\"region\")\n        .agg([\n            pl.col(\"amount\").sum().alias(\"total_amount\"),\n            pl.col(\"amount\").mean().alias(\"mean_amount\")\n        ])\n        .sort(\"region\")\n    )\n\n    print(\"Stats per region (sorted):\")\n    print(region_stats)\n    print(\"-\" * 30)\n\n    # 3. Add 'size' column using a custom Python function\n    # We use map_elements to apply the function to each row's amount\n    df_with_size = df.with_columns(\n        pl.col(\"amount\")\n        .map_elements(categorize_amount, return_dtype=pl.String)\n        .alias(\"size\")\n    )\n\n    print(\"DataFrame with 'size' column:\")\n    print(df_with_size)\n\nif __name__ == \"__main__\":\n    main()\n",
+ "tool_log": [
+  {
+   "tool": "run_scraper",
+   "args": {
+    "method": "collect_by_url",
+    "input": [
+     {
+      "package_name": "polars"
+     }
+    ],
+    "dataset_id": "gd_mk57m0301khq4jmsul"
+   },
+   "page": 0,
+   "cached": true,
+   "live_requests": 0,
+   "is_error": false,
+   "chars": 999
+  },
+  {
+   "tool": "run_scraper",
+   "args": {
+    "input": [
+     {
+      "package_name": "polars"
+     }
+    ],
+    "method": "collect_by_url",
+    "dataset_id": "gd_mk57kc3t1wwgmnepp9"
+   },
+   "page": 0,
+   "cached": true,
+   "live_requests": 0,
+   "is_error": false,
+   "chars": 6420
+  }
+ ],
+ "prompt_tokens": 4699,
+ "completion_tokens": 629,
+ "cost_usd": 0.0021182500000000003,
+ "llm_calls": 3,
+ "tool_calls": 2,
+ "tool_errors": 0,
+ "bd_requests": 0,
+ "bd_cache_hits": 2,
+ "latency_s": 4.95
+}

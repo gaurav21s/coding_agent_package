@@ -1,0 +1,11 @@
+ESLintInvalidOptionsError: Invalid Options:
+- Unknown options: useEslintrc
+    at processOptions (/Users/Admin/Documents/New project/coding_agent_package/sandbox/node/node_modules/eslint/lib/eslint/eslint-helpers.js:953:9)
+    at new ESLint (/Users/Admin/Documents/New project/coding_agent_package/sandbox/node/node_modules/eslint/lib/eslint/eslint.js:717:28)
+    at runLint (file:///Users/Admin/Documents/New%20project/coding_agent_package/sandbox/node/work/js-eslint-api/B/run1/work/main.mjs:5:18)
+    at file:///Users/Admin/Documents/New%20project/coding_agent_package/sandbox/node/work/js-eslint-api/B/run1/work/main.mjs:30:1
+    at ModuleJob.run (node:internal/modules/esm/module_job:274:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+  code: 'ESLINT_INVALID_OPTIONS'
+}

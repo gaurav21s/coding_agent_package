@@ -1,0 +1,5 @@
+Copy as Python dict:
+{'id': 1, 'items': ['apple', 'banana'], 'total': 99.5}
+
+Copy as JSON string:
+{"id":1,"items":["apple","banana"],"total":99.5}

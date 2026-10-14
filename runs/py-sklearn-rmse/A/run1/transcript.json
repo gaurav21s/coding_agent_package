@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "You are a coding agent. Today's date is 2026-10-12.\nWrite a complete program that works with the latest released version of every library it uses, as installed today.\nDo not use deprecated or removed APIs. If tools are available to you, first use them to look up the current version of each library and its changelog or migration guide, then write the code.\nThe program must run offline, finish on its own, and print its results.\nEnd your reply with exactly one fenced code block that holds the whole program."
+ },
+ {
+  "role": "user",
+  "content": "Using scikit-learn, create a synthetic regression dataset with make_regression (200 samples, 3 features, noise=10, random_state=0), split it 80/20 with random_state=0, fit a LinearRegression, and print the root mean squared error on the test split.\n\nTarget: Python 3.11, run as `python main.py`."
+ },
+ {
+  "role": "assistant",
+  "content": "To calculate the Root Mean Squared Error (RMSE) for a linear regression model using the latest stable version of `scikit-learn` (v1.5.2 as of October 2026), we use `sklearn.metrics.root_mean_squared_error`. This function was introduced in version 1.4 to replace the older method of calculating the square root of `mean_squared_error`.\n\nHere is the complete program:\n\n```python\nimport numpy as np\nfrom sklearn.datasets import make_regression\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.linear_model import LinearRegression\nfrom sklearn.metrics import root_mean_squared_error\n\ndef main():\n    # 1. Create synthetic regression dataset\n    X, y = make_regression(\n        n_samples=200, \n        n_features=3, \n        noise=10, \n        random_state=0\n    )\n\n    # 2. Split the data 80/20\n    X_train, X_test, y_train, y_test = train_test_split(\n        X, y, \n        test_size=0.2, \n        random_state=0\n    )\n\n    # 3. Fit LinearRegression\n    model = LinearRegression()\n    model.fit(X_train, y_train)\n\n    # 4. Predict on test split\n    y_pred = model.predict(X_test)\n\n    # 5. Calculate and print RMSE\n    # root_mean_squared_error is the standard API as of scikit-learn 1.4+\n    rmse = root_mean_squared_error(y_test, y_pred)\n    \n    print(f\"Root Mean Squared Error: {rmse:.4f}\")\n\nif __name__ == \"__main__\":\n    main()\n```"
+ }
+]

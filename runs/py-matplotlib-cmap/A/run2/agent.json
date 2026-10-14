@@ -1,0 +1,17 @@
+{
+ "agent": "A",
+ "task_id": "py-matplotlib-cmap",
+ "model": "google/gemini-3.1-flash-lite",
+ "stop_reason": "answered",
+ "code": "import matplotlib\n# Set the backend to Agg before importing pyplot to ensure non-interactive mode\nmatplotlib.use('Agg')\n\nimport matplotlib.pyplot as plt\nimport matplotlib.colormaps as cmaps\nimport numpy as np\n\ndef main():\n    # 1. Look up the 'viridis' colormap object\n    viridis = cmaps['viridis']\n\n    # 2. Sample 5 evenly spaced RGBA colors\n    # np.linspace(0, 1, 5) gives [0.0, 0.25, 0.5, 0.75, 1.0]\n    indices = np.linspace(0, 1, 5)\n    colors = [viridis(i) for i in indices]\n\n    # Print the colors\n    print(\"5 sampled RGBA colors from viridis:\")\n    for i, color in enumerate(colors):\n        print(f\"Color {i+1}: {color}\")\n\n    # 3. Create a 5-bar bar chart\n    fig, ax = plt.subplots()\n    x = np.arange(1, 6)\n    heights = [10, 20, 15, 25, 30]\n    \n    ax.bar(x, heights, color=colors)\n    ax.set_title(\"Viridis 5-Bar Chart\")\n    ax.set_xlabel(\"Bar Index\")\n    ax.set_ylabel(\"Value\")\n\n    # 4. Save to bars.png\n    plt.savefig('bars.png')\n    print(\"\\nChart saved successfully as 'bars.png'.\")\n\nif __name__ == \"__main__\":\n    main()\n",
+ "tool_log": [],
+ "prompt_tokens": 203,
+ "completion_tokens": 513,
+ "cost_usd": 0.00082025,
+ "llm_calls": 1,
+ "tool_calls": 0,
+ "tool_errors": 0,
+ "bd_requests": 0,
+ "bd_cache_hits": 0,
+ "latency_s": 2.41
+}

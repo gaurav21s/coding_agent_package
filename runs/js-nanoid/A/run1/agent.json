@@ -1,0 +1,17 @@
+{
+ "agent": "A",
+ "task_id": "js-nanoid",
+ "model": "google/gemini-3.1-flash-lite",
+ "stop_reason": "answered",
+ "code": "import { nanoid } from 'nanoid';\nimport { customAlphabet } from 'nanoid';\n\n/**\n * As per nanoid documentation:\n * - nanoid() generates a 21-character URL-friendly ID.\n * - nanoid(size) generates an ID of a specific length.\n * - customAlphabet(alphabet, size) creates a generator for specific constraints.\n */\n\nasync function run() {\n    // 1. Default-length ID (21 characters)\n    const defaultId = await nanoid();\n\n    // 2. 10-character ID\n    const tenCharId = await nanoid(10);\n\n    // 3. 6-character ID made only of digits\n    const digits = '0123456789';\n    const nanoidDigits = customAlphabet(digits, 6);\n    const customId = await nanoidDigits();\n\n    // Output results\n    const results = [\n        { label: 'Default ID', id: defaultId },\n        { label: '10-char ID', id: tenCharId },\n        { label: '6-digit ID', id: customId }\n    ];\n\n    results.forEach(item => {\n        console.log(`${item.label}: ${item.id} (Length: ${item.id.length})`);\n    });\n}\n\n// Execute the async function\nawait run();\n",
+ "tool_log": [],
+ "prompt_tokens": 218,
+ "completion_tokens": 416,
+ "cost_usd": 0.0006785,
+ "llm_calls": 1,
+ "tool_calls": 0,
+ "tool_errors": 0,
+ "bd_requests": 0,
+ "bd_cache_hits": 0,
+ "latency_s": 2.45
+}

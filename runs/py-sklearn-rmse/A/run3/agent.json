@@ -1,0 +1,17 @@
+{
+ "agent": "A",
+ "task_id": "py-sklearn-rmse",
+ "model": "google/gemini-3.1-flash-lite",
+ "stop_reason": "answered",
+ "code": "import numpy as np\nfrom sklearn.datasets import make_regression\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.linear_model import LinearRegression\nfrom sklearn.metrics import root_mean_squared_error\n\ndef main():\n    # 1. Create synthetic regression dataset\n    X, y = make_regression(\n        n_samples=200, \n        n_features=3, \n        noise=10, \n        random_state=0\n    )\n\n    # 2. Split the data 80/20\n    X_train, X_test, y_train, y_test = train_test_split(\n        X, y, \n        test_size=0.2, \n        random_state=0\n    )\n\n    # 3. Fit LinearRegression\n    model = LinearRegression()\n    model.fit(X_train, y_train)\n\n    # 4. Predict on test split\n    y_pred = model.predict(X_test)\n\n    # 5. Calculate and print RMSE\n    # root_mean_squared_error is the standard API as of scikit-learn 1.4+\n    rmse = root_mean_squared_error(y_test, y_pred)\n    \n    print(f\"Root Mean Squared Error: {rmse:.4f}\")\n\nif __name__ == \"__main__\":\n    main()\n",
+ "tool_log": [],
+ "prompt_tokens": 205,
+ "completion_tokens": 418,
+ "cost_usd": 0.00067825,
+ "llm_calls": 1,
+ "tool_calls": 0,
+ "tool_errors": 0,
+ "bd_requests": 0,
+ "bd_cache_hits": 0,
+ "latency_s": 2.11
+}

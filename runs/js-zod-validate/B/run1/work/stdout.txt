@@ -1,0 +1,24 @@
+--- Parsing Valid Data ---
+Success: true
+Data: { email: 'test@example.com', password: 'securePassword123', age: 25 }
+
+--- Parsing Invalid Data ---
+Validation failed. Issues:
+- Path [email]: Invalid email address
+- Path [password]: Password must be at least 8 characters
+- Path [age]: Too small: expected number to be >=13
+
+Errors grouped per field:
+{
+  email: [ 'Invalid email address' ],
+  password: [ 'Password must be at least 8 characters' ],
+  age: [ 'Too small: expected number to be >=13' ]
+}
+
+--- Parsing Admin Data ---
+Admin Success: true
+Admin Data: {
+  email: 'admin@example.com',
+  password: 'adminPassword123',
+  role: 'admin'
+}

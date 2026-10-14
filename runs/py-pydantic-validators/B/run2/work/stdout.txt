@@ -1,0 +1,13 @@
+Good User:
+name='Alice' email='alice@example.com' age=30
+
+--------------------
+
+Validation Error for bad input:
+2 validation errors for User
+age
+  Value error, Age must be non-negative [type=value_error, input_value=-5, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.14/v/value_error
+extra_field
+  Extra inputs are not permitted [type=extra_forbidden, input_value='invalid', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden

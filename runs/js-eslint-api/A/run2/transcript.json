@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "You are a coding agent. Today's date is 2026-10-12.\nWrite a complete program that works with the latest released version of every library it uses, as installed today.\nDo not use deprecated or removed APIs. If tools are available to you, first use them to look up the current version of each library and its changelog or migration guide, then write the code.\nThe program must run offline, finish on its own, and print its results.\nEnd your reply with exactly one fenced code block that holds the whole program."
+ },
+ {
+  "role": "user",
+  "content": "Using the eslint package (latest) Node.js API in an ES module, lint the code string `var x = 1; if (x == 2) {}` with only the rules no-var and eqeqeq enabled as errors, without reading any config file from disk. Print each reported message's ruleId and line number.\n\nTarget: Node.js 22, ES module saved as main.mjs, run as `node main.mjs`."
+ },
+ {
+  "role": "assistant",
+  "content": "To lint code using the `eslint` package (v9.x) via the Node.js API, we use the `ESLint` class. In version 9, the configuration is handled via the `overrideConfig` property (or the `configType: 'flat'` approach). Since we want to avoid reading files from disk, we explicitly set `useEslintrc: false`.\n\nHere is the `main.mjs` file:\n\n```javascript\nimport { ESLint } from \"eslint\";\n\nasync function runLint() {\n  // Initialize ESLint with no config file and specific rules\n  const eslint = new ESLint({\n    useEslintrc: false,\n    overrideConfig: [\n      {\n        rules: {\n          \"no-var\": \"error\",\n          \"eqeqeq\": \"error\"\n        },\n        languageOptions: {\n          ecmaVersion: 2022,\n          sourceType: \"module\"\n        }\n      }\n    ]\n  });\n\n  const code = \"var x = 1; if (x == 2) {}\";\n\n  // Lint the text\n  const results = await eslint.lintText(code);\n\n  // Process and print results\n  results.forEach((result) => {\n    result.messages.forEach((msg) => {\n      console.log(`Rule: ${msg.ruleId}, Line: ${msg.line}`);\n    });\n  });\n}\n\nrunLint().catch((error) => {\n  console.error(error);\n  process.exit(1);\n});\n```\n\n### Explanation:\n1.  **`ESLint` class**: This is the primary entry point for the ESLint Node.js API in version 9.\n2.  **`useEslintrc: false`**: This ensures that ESLint ignores any configuration files (like `.eslintrc` or `eslint.config.js`) present in the directory.\n3.  **`overrideConfig`**: This allows us to define the rules (`no-var` and `eqeqeq`) programmatically.\n4.  **`languageOptions`**: Necessary to define the environment (e.g., `ecmaVersion`) so the parser understands the syntax.\n5.  **`lintText`**: This method processes the provided string directly without needing a file on disk.\n6.  **Output**: The script iterates through the `messages` array in the result object to extract and print the `ruleId` and `line` as requested."
+ }
+]

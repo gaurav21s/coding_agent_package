@@ -1,0 +1,6 @@
+Initial cache size: 0
+Cache size after setting two keys: 2
+Cache size after deleting 'key1': 1
+Cache size after waiting 80ms: 0
+'key2' exists: false
+Cache size after clearing: 0

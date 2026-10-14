@@ -1,0 +1,70 @@
+{
+ "agent": "B",
+ "task_id": "py-sklearn-rmse",
+ "model": "google/gemini-3.1-flash-lite",
+ "stop_reason": "answered",
+ "code": "import numpy as np\nfrom sklearn.datasets import make_regression\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.linear_model import LinearRegression\nfrom sklearn.metrics import mean_squared_error\n\ndef main():\n    # 1. Create synthetic regression dataset\n    X, y = make_regression(\n        n_samples=200, \n        n_features=3, \n        noise=10, \n        random_state=0\n    )\n\n    # 2. Split 80/20\n    X_train, X_test, y_train, y_test = train_test_split(\n        X, y, \n        test_size=0.2, \n        random_state=0\n    )\n\n    # 3. Fit LinearRegression\n    model = LinearRegression()\n    model.fit(X_train, y_train)\n\n    # 4. Predict on test split\n    y_pred = model.predict(X_test)\n\n    # 5. Calculate and print RMSE\n    # squared=False returns the root mean squared error\n    rmse = mean_squared_error(y_test, y_pred, squared=False)\n    \n    print(f\"Root Mean Squared Error: {rmse:.4f}\")\n\nif __name__ == \"__main__\":\n    main()\n",
+ "tool_log": [
+  {
+   "tool": "run_scraper",
+   "args": {
+    "dataset_id": "gd_mk57kc3t1wwgmnepp9",
+    "input": [
+     {
+      "package_name": "scikit-learn"
+     }
+    ],
+    "method": "collect_by_url"
+   },
+   "page": 0,
+   "cached": true,
+   "live_requests": 0,
+   "is_error": false,
+   "chars": 840
+  },
+  {
+   "tool": "get_scraper_results",
+   "args": {
+    "snapshot_id": "sd_mv50yosc2izrka613g"
+   },
+   "page": 0
+  },
+  {
+   "tool": "run_scraper",
+   "args": {
+    "input": [
+     {
+      "package_name": "scikit-learn"
+     }
+    ],
+    "method": "collect_by_url",
+    "dataset_id": "gd_mk57kc3t1wwgmnepp9"
+   },
+   "page": 0,
+   "cached": true,
+   "live_requests": 0,
+   "is_error": false,
+   "chars": 840
+  },
+  {
+   "tool": "scrape_as_markdown",
+   "args": {
+    "url": "https://pypi.org/project/scikit-learn"
+   },
+   "page": 0,
+   "cached": true,
+   "live_requests": 0,
+   "is_error": false,
+   "chars": 159227
+  }
+ ],
+ "prompt_tokens": 9650,
+ "completion_tokens": 666,
+ "cost_usd": 0.0025587500000000003,
+ "llm_calls": 5,
+ "tool_calls": 4,
+ "tool_errors": 1,
+ "bd_requests": 0,
+ "bd_cache_hits": 3,
+ "latency_s": 7.35
+}

@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "You are a coding agent. Today's date is 2026-10-12.\nWrite a complete program that works with the latest released version of every library it uses, as installed today.\nDo not use deprecated or removed APIs. If tools are available to you, first use them to look up the current version of each library and its changelog or migration guide, then write the code.\nThe program must run offline, finish on its own, and print its results.\nEnd your reply with exactly one fenced code block that holds the whole program."
+ },
+ {
+  "role": "user",
+  "content": "Using NumPy only (no SciPy), sample sin(x) at 1001 evenly spaced points on [0, pi], compute the definite integral with the trapezoidal rule, cast the result to NumPy's 64-bit float type, and print it rounded to 6 decimal places.\n\nTarget: Python 3.11, run as `python main.py`."
+ },
+ {
+  "role": "assistant",
+  "content": "To compute the definite integral of $\\sin(x)$ on $[0, \\pi]$ using the trapezoidal rule with NumPy, we define the interval using `np.linspace`, calculate the function values, and apply the trapezoidal integration formula:\n$\\int_a^b f(x) dx \\approx \\frac{\\Delta x}{2} \\sum_{i=1}^{n} (f(x_{i-1}) + f(x_i))$\n\nIn NumPy, this is efficiently handled by `np.trapz` (or `np.trapezoid` in newer versions). As of October 2026, `np.trapezoid` is the preferred API, as `np.trapz` is deprecated in recent NumPy releases.\n\n```python\nimport numpy as np\n\ndef main():\n    # Define the number of points and the interval\n    n_points = 1001\n    start = 0.0\n    stop = np.pi\n    \n    # Generate 1001 evenly spaced points\n    x = np.linspace(start, stop, n_points)\n    \n    # Sample sin(x) at these points\n    y = np.sin(x)\n    \n    # Compute the definite integral using the trapezoidal rule\n    # np.trapezoid is the current standard (replacing np.trapz)\n    integral = np.trapezoid(y, x)\n    \n    # Cast to 64-bit float explicitly\n    result = np.float64(integral)\n    \n    # Print the result rounded to 6 decimal places\n    print(f\"{result:.6f}\")\n\nif __name__ == \"__main__\":\n    main()\n```"
+ }
+]

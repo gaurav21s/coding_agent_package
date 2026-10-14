@@ -1,0 +1,24 @@
+{
+ "code_extracted": true,
+ "deprecated_static": 0,
+ "deprecated_static_items": {},
+ "runs": false,
+ "timeout": false,
+ "strict_runs": false,
+ "strict_failed_on_deprecation": false,
+ "deprecated_runtime": 0,
+ "deprecation_warnings": [],
+ "removed_api_errors": 0,
+ "hallucinated": 1,
+ "hallucinated_symbols": [
+  {
+   "symbol": "matplotlib.colormaps",
+   "missing": "matplotlib.colormaps",
+   "kind": "runtime"
+  }
+ ],
+ "removed_api_symbols": [],
+ "error_type": "ModuleNotFoundError",
+ "error_message": "No module named 'matplotlib.colormaps'",
+ "gt_items_hit": []
+}

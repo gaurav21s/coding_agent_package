@@ -1,0 +1,5 @@
+Initial size: 0
+Size after setting two keys: 2
+Size after deleting key1: 1
+Size after waiting 80ms: 0
+Size after clearing: 0

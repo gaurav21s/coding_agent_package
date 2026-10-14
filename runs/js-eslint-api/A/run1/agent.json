@@ -1,0 +1,17 @@
+{
+ "agent": "A",
+ "task_id": "js-eslint-api",
+ "model": "google/gemini-3.1-flash-lite",
+ "stop_reason": "answered",
+ "code": "import { ESLint } from \"eslint\";\n\nasync function runLint() {\n  // Initialize ESLint with a flat config object\n  // We disable all default rules and enable only the requested ones\n  const eslint = new ESLint({\n    overrideConfig: [\n      {\n        rules: {\n          \"no-var\": \"error\",\n          \"eqeqeq\": \"error\"\n        }\n      }\n    ],\n    useEslintrc: false, // Ensure no config files are loaded from disk\n  });\n\n  const code = \"var x = 1; if (x == 2) {}\";\n\n  // Lint the text\n  const results = await eslint.lintText(code);\n\n  // Process and print results\n  results.forEach((result) => {\n    result.messages.forEach((msg) => {\n      console.log(`Rule: ${msg.ruleId}, Line: ${msg.line}`);\n    });\n  });\n}\n\nrunLint().catch((error) => {\n  console.error(error);\n  process.exit(1);\n});\n",
+ "tool_log": [],
+ "prompt_tokens": 218,
+ "completion_tokens": 503,
+ "cost_usd": 0.000809,
+ "llm_calls": 1,
+ "tool_calls": 0,
+ "tool_errors": 0,
+ "bd_requests": 0,
+ "bd_cache_hits": 0,
+ "latency_s": 5.73
+}

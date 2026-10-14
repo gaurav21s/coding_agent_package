@@ -1,0 +1,17 @@
+{
+ "agent": "A",
+ "task_id": "js-zod-validate",
+ "model": "google/gemini-3.1-flash-lite",
+ "stop_reason": "answered",
+ "code": "import { z } from 'zod';\n\n// 1. Define the signup schema\nconst signupSchema = z.object({\n  email: z.string().email(\"Invalid email address\"),\n  password: z.string().min(8, \"Password must be at least 8 characters long\"),\n  age: z.number().int().min(13, \"Must be at least 13 years old\").optional(),\n});\n\n// 2. Parse one valid and one invalid object\nconst validData = {\n  email: \"user@example.com\",\n  password: \"securePassword123\",\n  age: 25,\n};\n\nconst invalidData = {\n  email: \"not-an-email\",\n  password: \"short\",\n  age: 10,\n};\n\nconsole.log(\"--- Valid Parsing ---\");\nconst validResult = signupSchema.safeParse(validData);\nconsole.log(\"Success:\", validResult.success);\n\nconsole.log(\"\\n--- Invalid Parsing ---\");\nconst invalidResult = signupSchema.safeParse(invalidData);\n\nif (!invalidResult.success) {\n  // Print every issue's path and message\n  console.log(\"Individual Issues:\");\n  invalidResult.error.issues.forEach((issue) => {\n    console.log(`Path: ${issue.path.join('.')}, Message: ${issue.message}`);\n  });\n\n  // Print errors grouped per field\n  console.log(\"\\nErrors grouped by field:\");\n  console.log(invalidResult.error.flatten().fieldErrors);\n}\n\n// 3. Create an admin schema by extending the signup schema\nconst adminSchema = signupSchema.extend({\n  role: z.enum(['admin', 'user']),\n});\n\nconsole.log(\"\\n--- Admin Parsing ---\");\nconst adminData = {\n  email: \"admin@example.com\",\n  password: \"adminPassword123\",\n  age: 30,\n  role: \"admin\",\n};\n\nconst adminResult = adminSchema.safeParse(adminData);\nconsole.log(\"Admin Success:\", adminResult.success);\nconsole.log(\"Admin Data:\", adminResult.data);\n",
+ "tool_log": [],
+ "prompt_tokens": 243,
+ "completion_tokens": 654,
+ "cost_usd": 0.00104175,
+ "llm_calls": 1,
+ "tool_calls": 0,
+ "tool_errors": 0,
+ "bd_requests": 0,
+ "bd_cache_hits": 0,
+ "latency_s": 2.66
+}

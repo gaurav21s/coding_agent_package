@@ -1,0 +1,626 @@
+{
+  "_about": "20 coding prompts on fast-moving libraries. Each ground_truth item is a deprecation or removal stated in an official changelog, release note or migration guide; 'evidence' quotes it. static_patterns are regexes run on the generated code with comments removed. runtime_markers are substrings that, when they show up in a runtime error, mean the failure came from this removed API rather than a hallucinated one.",
+  "tasks": [
+    {
+      "id": "py-pydantic-validators",
+      "ecosystem": "pypi",
+      "package": "pydantic",
+      "language": "python",
+      "prompt": "Using pydantic, define a User model with fields name (str), email (str) and age (int). Add a per-field validator that rejects negative ages and another that lowercases the email. Add a model-level check that name and email are not identical. Configure the model to forbid extra fields and to strip whitespace from all strings. Validate one good input and one bad input, print the good model and the validation error for the bad one.",
+      "ground_truth": [
+        {
+          "deprecated": "@validator",
+          "replacement": "@field_validator",
+          "status": "deprecated in 2.0",
+          "source_url": "https://docs.pydantic.dev/latest/migration/",
+          "evidence": "`@validator` has been deprecated, and should be replaced with `@field_validator`",
+          "static_patterns": ["@\\s*(?:\\w+\\.)?validator\\b"],
+          "runtime_markers": ["`validator` is deprecated", "Pydantic V1 style `@validator`"]
+        },
+        {
+          "deprecated": "@root_validator",
+          "replacement": "@model_validator",
+          "status": "deprecated in 2.0",
+          "source_url": "https://docs.pydantic.dev/latest/migration/",
+          "evidence": "`@root_validator` has been deprecated, and should be replaced with `@model_validator`",
+          "static_patterns": ["@\\s*(?:\\w+\\.)?root_validator\\b"],
+          "runtime_markers": ["root_validator"]
+        },
+        {
+          "deprecated": "class Config inside a model",
+          "replacement": "model_config = ConfigDict(...)",
+          "status": "deprecated in 2.0",
+          "source_url": "https://docs.pydantic.dev/latest/migration/",
+          "evidence": "In Pydantic V2, to specify config on a model, you should set a class attribute called `model_config` to be a dict",
+          "static_patterns": ["(?m)^\\s+class\\s+Config\\s*[:(]"],
+          "runtime_markers": ["class-based `config` is deprecated"]
+        }
+      ]
+    },
+    {
+      "id": "py-pydantic-serialize",
+      "ecosystem": "pypi",
+      "package": "pydantic",
+      "language": "python",
+      "prompt": "Using pydantic, define an Order model (id: int, items: list[str], total: float). Build one Order from a Python dict and another from a JSON string. Make a copy of the first order with total changed to 99.5. Print the copy as a Python dict and as a JSON string.",
+      "ground_truth": [
+        {
+          "deprecated": "Model.dict()",
+          "replacement": "Model.model_dump()",
+          "status": "deprecated in 2.0",
+          "source_url": "https://docs.pydantic.dev/latest/migration/",
+          "evidence": "| `dict()` | `model_dump()` |",
+          "static_patterns": ["\\.dict\\("],
+          "runtime_markers": ["The `dict` method is deprecated"]
+        },
+        {
+          "deprecated": "Model.json()",
+          "replacement": "Model.model_dump_json()",
+          "status": "deprecated in 2.0",
+          "source_url": "https://docs.pydantic.dev/latest/migration/",
+          "evidence": "| `json()` | `model_dump_json()` |",
+          "static_patterns": ["(?<![\\w])(?!json\\b)\\w+\\.json\\(\\s*\\)", "\\)\\.json\\("],
+          "runtime_markers": ["The `json` method is deprecated"]
+        },
+        {
+          "deprecated": "Model.parse_obj()",
+          "replacement": "Model.model_validate()",
+          "status": "deprecated in 2.0",
+          "source_url": "https://docs.pydantic.dev/latest/migration/",
+          "evidence": "| `parse_obj()` | `model_validate()` |",
+          "static_patterns": ["\\.parse_obj\\("],
+          "runtime_markers": ["The `parse_obj` method is deprecated"]
+        },
+        {
+          "deprecated": "Model.parse_raw()",
+          "replacement": "Model.model_validate_json()",
+          "status": "deprecated in 2.0",
+          "source_url": "https://docs.pydantic.dev/latest/migration/",
+          "evidence": "`parse_raw` and `parse_file` are now deprecated. In Pydantic V2, `model_validate_json` works like `parse_raw`.",
+          "static_patterns": ["\\.parse_raw\\("],
+          "runtime_markers": ["The `parse_raw` method is deprecated"]
+        },
+        {
+          "deprecated": "Model.copy()",
+          "replacement": "Model.model_copy()",
+          "status": "deprecated in 2.0",
+          "source_url": "https://docs.pydantic.dev/latest/migration/",
+          "evidence": "| `copy()` | `model_copy()` |",
+          "static_patterns": ["\\.copy\\(\\s*update\\s*="],
+          "runtime_markers": ["The `copy` method is deprecated"]
+        }
+      ]
+    },
+    {
+      "id": "py-pandas-append",
+      "ecosystem": "pypi",
+      "package": "pandas",
+      "language": "python",
+      "prompt": "Using pandas, start with an empty DataFrame with columns name and score. In a loop, add three rows one at a time to the DataFrame (each row arrives as a dict). Print the final DataFrame and the mean score.",
+      "ground_truth": [
+        {
+          "deprecated": "DataFrame.append",
+          "replacement": "pandas.concat",
+          "status": "removed in 2.0",
+          "source_url": "https://pandas.pydata.org/docs/whatsnew/v2.0.0.html",
+          "evidence": "Removed deprecated Series.append, DataFrame.append, use concat instead",
+          "static_patterns": ["\\.append\\([^)]*ignore_index", "\\._append\\("],
+          "runtime_markers": ["object has no attribute 'append'", "object has no attribute '_append'"]
+        }
+      ]
+    },
+    {
+      "id": "py-numpy-integrate",
+      "ecosystem": "pypi",
+      "package": "numpy",
+      "language": "python",
+      "prompt": "Using NumPy only (no SciPy), sample sin(x) at 1001 evenly spaced points on [0, pi], compute the definite integral with the trapezoidal rule, cast the result to NumPy's 64-bit float type, and print it rounded to 6 decimal places.",
+      "ground_truth": [
+        {
+          "deprecated": "np.trapz",
+          "replacement": "np.trapezoid",
+          "status": "deprecated in 2.0",
+          "source_url": "https://numpy.org/doc/stable/release/2.0.0-notes.html",
+          "evidence": "np.trapz has been deprecated. Use np.trapezoid or a scipy.integrate function instead.",
+          "static_patterns": ["\\btrapz\\s*\\("],
+          "runtime_markers": ["trapz"]
+        },
+        {
+          "deprecated": "np.float_",
+          "replacement": "np.float64",
+          "status": "removed in 2.0",
+          "source_url": "https://numpy.org/doc/stable/release/2.0.0-notes.html",
+          "evidence": "Alias np.float_ has been removed. Use np.float64 instead.",
+          "static_patterns": ["\\.float_\\b"],
+          "runtime_markers": ["float_"]
+        }
+      ]
+    },
+    {
+      "id": "py-sqlalchemy-orm",
+      "ecosystem": "pypi",
+      "package": "sqlalchemy",
+      "language": "python",
+      "prompt": "Using the SQLAlchemy ORM with an in-memory SQLite database, define a Book model (id, title, author) with a declarative base, create the table, insert two books, fetch one book by its primary key, then run a raw SQL statement that counts the rows directly on the engine. Print the fetched book and the count.",
+      "ground_truth": [
+        {
+          "deprecated": "sqlalchemy.ext.declarative.declarative_base",
+          "replacement": "sqlalchemy.orm.declarative_base / DeclarativeBase",
+          "status": "moved in 2.0",
+          "source_url": "https://docs.sqlalchemy.org/en/20/changelog/migration_20.html",
+          "evidence": "The declarative_base ... has been moved to the sqlalchemy.orm package",
+          "static_patterns": ["sqlalchemy\\.ext\\.declarative"],
+          "runtime_markers": ["declarative_base() function is now available as sqlalchemy.orm.declarative_base"]
+        },
+        {
+          "deprecated": "Query.get()",
+          "replacement": "Session.get()",
+          "status": "legacy in 2.0 (LegacyAPIWarning)",
+          "source_url": "https://docs.sqlalchemy.org/en/20/changelog/migration_20.html",
+          "evidence": "The Query.get() method remains for legacy purposes, but the primary interface is now the Session.get() method",
+          "static_patterns": ["\\.query\\([^)]*\\)\\s*\\.get\\("],
+          "runtime_markers": ["Query.get() method is considered legacy"]
+        },
+        {
+          "deprecated": "Engine.execute()",
+          "replacement": "Connection.execute() inside engine.connect()",
+          "status": "removed in 2.0",
+          "source_url": "https://docs.sqlalchemy.org/en/20/changelog/migration_20.html",
+          "evidence": "The Engine.execute() function/method is considered legacy as of the 1.x series of SQLAlchemy and will be removed in 2.0. All statement execution in SQLAlchemy 2.0 is performed by the Connection.execute() method",
+          "static_patterns": ["\\bengine\\.execute\\("],
+          "runtime_markers": ["'Engine' object has no attribute 'execute'"]
+        }
+      ]
+    },
+    {
+      "id": "py-pillow-text",
+      "ecosystem": "pypi",
+      "package": "pillow",
+      "language": "python",
+      "prompt": "Using Pillow, create an 800x600 RGB image in memory, draw the text 'Hello' on it with the default font, measure the pixel width and height of that text, then resize the image to 200x150 with high-quality (Lanczos-style) downsampling. Print the text size and the final image size.",
+      "ground_truth": [
+        {
+          "deprecated": "Image.ANTIALIAS",
+          "replacement": "Image.Resampling.LANCZOS (or Image.LANCZOS)",
+          "status": "removed in 10.0",
+          "source_url": "https://pillow.readthedocs.io/en/stable/releasenotes/10.0.0.html",
+          "evidence": "Image.ANTIALIAS -> Image.LANCZOS or Image.Resampling.LANCZOS",
+          "static_patterns": ["\\bANTIALIAS\\b"],
+          "runtime_markers": ["ANTIALIAS"]
+        },
+        {
+          "deprecated": "ImageDraw.textsize()",
+          "replacement": "ImageDraw.textbbox() / ImageDraw.textlength()",
+          "status": "removed in 10.0",
+          "source_url": "https://pillow.readthedocs.io/en/stable/releasenotes/10.0.0.html",
+          "evidence": "ImageDraw.textsize() and ImageDraw.multiline_textsize() -> ImageDraw.textbbox, ImageDraw.textlength and ImageDraw.multiline_textbbox",
+          "static_patterns": ["\\.textsize\\("],
+          "runtime_markers": ["textsize"]
+        },
+        {
+          "deprecated": "ImageFont.getsize() / FreeTypeFont.getsize()",
+          "replacement": "getbbox() / getlength()",
+          "status": "removed in 10.0",
+          "source_url": "https://pillow.readthedocs.io/en/stable/releasenotes/10.0.0.html",
+          "evidence": "ImageFont.getsize() -> ImageFont.getbbox and ImageFont.getlength",
+          "static_patterns": ["\\.getsize\\("],
+          "runtime_markers": ["getsize"]
+        }
+      ]
+    },
+    {
+      "id": "py-sklearn-rmse",
+      "ecosystem": "pypi",
+      "package": "scikit-learn",
+      "language": "python",
+      "prompt": "Using scikit-learn, create a synthetic regression dataset with make_regression (200 samples, 3 features, noise=10, random_state=0), split it 80/20 with random_state=0, fit a LinearRegression, and print the root mean squared error on the test split.",
+      "ground_truth": [
+        {
+          "deprecated": "mean_squared_error(..., squared=False)",
+          "replacement": "root_mean_squared_error",
+          "status": "deprecated in 1.4, removed in 1.6",
+          "source_url": "https://scikit-learn.org/stable/whats_new/v1.4.html",
+          "evidence": "The squared parameter of metrics.mean_squared_error and metrics.mean_squared_log_error is deprecated and will be removed in 1.6.",
+          "static_patterns": ["squared\\s*=\\s*False"],
+          "runtime_markers": ["'squared'"]
+        }
+      ]
+    },
+    {
+      "id": "py-scipy-integrate",
+      "ecosystem": "pypi",
+      "package": "scipy",
+      "language": "python",
+      "prompt": "Using scipy.integrate, sample x**2 at 101 evenly spaced points on [0, 1]. Compute the integral with Simpson's rule and with the trapezoidal rule, and also compute the cumulative trapezoidal integral. Print both integrals and the last value of the cumulative integral.",
+      "ground_truth": [
+        {
+          "deprecated": "scipy.integrate.simps",
+          "replacement": "scipy.integrate.simpson",
+          "status": "removed in 1.14",
+          "source_url": "https://docs.scipy.org/doc/scipy/release/1.14.0-notes.html",
+          "evidence": "scipy.integrate.{simps,trapz,cumtrapz} have been removed in favour of simpson, trapezoid, and cumulative_trapezoid.",
+          "static_patterns": ["\\bsimps\\b"],
+          "runtime_markers": ["simps"]
+        },
+        {
+          "deprecated": "scipy.integrate.trapz",
+          "replacement": "scipy.integrate.trapezoid",
+          "status": "removed in 1.14",
+          "source_url": "https://docs.scipy.org/doc/scipy/release/1.14.0-notes.html",
+          "evidence": "scipy.integrate.{simps,trapz,cumtrapz} have been removed in favour of simpson, trapezoid, and cumulative_trapezoid.",
+          "static_patterns": ["\\btrapz\\b"],
+          "runtime_markers": ["'trapz'"]
+        },
+        {
+          "deprecated": "scipy.integrate.cumtrapz",
+          "replacement": "scipy.integrate.cumulative_trapezoid",
+          "status": "removed in 1.14",
+          "source_url": "https://docs.scipy.org/doc/scipy/release/1.14.0-notes.html",
+          "evidence": "scipy.integrate.{simps,trapz,cumtrapz} have been removed in favour of simpson, trapezoid, and cumulative_trapezoid.",
+          "static_patterns": ["\\bcumtrapz\\b"],
+          "runtime_markers": ["cumtrapz"]
+        }
+      ]
+    },
+    {
+      "id": "py-matplotlib-cmap",
+      "ecosystem": "pypi",
+      "package": "matplotlib",
+      "language": "python",
+      "prompt": "Using matplotlib with the non-interactive Agg backend, look up the 'viridis' colormap object by name through the matplotlib colormap API (not pyplot), sample 5 evenly spaced RGBA colors from it, print them, and save a 5-bar bar chart using those colors to bars.png in the current directory.",
+      "ground_truth": [
+        {
+          "deprecated": "matplotlib.cm.get_cmap",
+          "replacement": "matplotlib.colormaps[name]",
+          "status": "removed in 3.9",
+          "source_url": "https://matplotlib.org/stable/api/prev_api_changes/api_changes_3.9.0.html",
+          "evidence": "matplotlib.cm.get_cmap; use matplotlib.colormaps[name] instead if you have a str.",
+          "static_patterns": ["\\bcm\\.get_cmap\\("],
+          "runtime_markers": ["get_cmap"]
+        }
+      ]
+    },
+    {
+      "id": "py-fastapi-lifespan",
+      "ecosystem": "pypi",
+      "package": "fastapi",
+      "language": "python",
+      "prompt": "Using FastAPI, build an app that loads a small in-memory 'model' (a dict like {'factor': 2}) when the application starts and clears it when the application shuts down. Expose GET /predict?x=3 that returns x times the factor. Exercise the app with FastAPI's TestClient so that startup and shutdown actually run, and print the JSON response.",
+      "ground_truth": [
+        {
+          "deprecated": "@app.on_event('startup' / 'shutdown')",
+          "replacement": "lifespan async context manager passed to FastAPI(lifespan=...)",
+          "status": "deprecated",
+          "source_url": "https://fastapi.tiangolo.com/advanced/events/",
+          "evidence": "Alternative Events (deprecated)",
+          "static_patterns": ["\\.on_event\\("],
+          "runtime_markers": ["on_event is deprecated"]
+        }
+      ]
+    },
+    {
+      "id": "py-polars-groupby",
+      "ecosystem": "pypi",
+      "package": "polars",
+      "language": "python",
+      "prompt": "Using polars, build a DataFrame of sales with columns region, product and amount (at least 6 rows). Compute the total and mean amount per region, sorted by region, and print it. Then add a column 'size' to the original DataFrame that applies a custom Python function to each amount ('big' if amount > 100 else 'small') and print the result.",
+      "ground_truth": [
+        {
+          "deprecated": "DataFrame.groupby",
+          "replacement": "DataFrame.group_by",
+          "status": "renamed in 0.19 (old name since removed)",
+          "source_url": "https://docs.pola.rs/releases/upgrade/0.19/",
+          "evidence": "groupby renamed to group_by ... Search: .groupby( Replace: .group_by(",
+          "static_patterns": ["\\.groupby\\("],
+          "runtime_markers": ["groupby"]
+        },
+        {
+          "deprecated": "Series/Expr.apply",
+          "replacement": "map_elements",
+          "status": "renamed in 0.19 (old name since removed)",
+          "source_url": "https://docs.pola.rs/releases/upgrade/0.19/",
+          "evidence": "| Series/Expr.apply | map_elements |",
+          "static_patterns": ["\\.apply\\("],
+          "runtime_markers": ["'apply'"]
+        }
+      ]
+    },
+    {
+      "id": "py-httpx-wsgi",
+      "ecosystem": "pypi",
+      "package": "httpx",
+      "language": "python",
+      "prompt": "Using httpx (synchronous client), test a tiny WSGI application in-process without starting a server. Define a plain WSGI app that returns the body 'hello' with status 200, send a GET request to it through an httpx.Client, and print the status code and the body.",
+      "ground_truth": [
+        {
+          "deprecated": "httpx.Client(app=...)",
+          "replacement": "httpx.Client(transport=httpx.WSGITransport(app=...))",
+          "status": "deprecated in 0.27, removed in 0.28",
+          "source_url": "https://github.com/encode/httpx/blob/master/CHANGELOG.md",
+          "evidence": "The deprecated `app` argument has now been removed. / The `app=...` shortcut has been deprecated. Use the explicit style of transport=httpx.WSGITransport() or transport=httpx.ASGITransport() instead.",
+          "static_patterns": ["Client\\([^)]*\\bapp\\s*="],
+          "runtime_markers": ["'app'"]
+        }
+      ]
+    },
+    {
+      "id": "js-express-routes",
+      "ecosystem": "npm",
+      "package": "express",
+      "language": "javascript",
+      "prompt": "Using Express (latest), write an ES module script that creates an app with: a DELETE /users/:id route that responds with status 204 and no body; a GET /search route that reads the q query parameter and returns it as JSON; and a catch-all route registered with a wildcard path that answers any other GET path with status 404 and the text 'not found'. Listen on port 0, call DELETE /users/7, GET /search?q=x and GET /nope with fetch, print each status code and body, then close the server so the process exits.",
+      "ground_truth": [
+        {
+          "deprecated": "app.del()",
+          "replacement": "app.delete()",
+          "status": "removed in 5.0",
+          "source_url": "https://expressjs.com/en/guide/migrating-5.html",
+          "evidence": "Express 5 no longer supports the app.del() function. If you use this function, an error is thrown. For registering HTTP DELETE routes, use the app.delete() function instead.",
+          "static_patterns": ["\\bapp\\.del\\("],
+          "runtime_markers": ["app.del is not a function"]
+        },
+        {
+          "deprecated": "req.param(name)",
+          "replacement": "req.params / req.query / req.body",
+          "status": "removed in 5.0",
+          "source_url": "https://expressjs.com/en/guide/migrating-5.html",
+          "evidence": "This potentially confusing and dangerous method of retrieving form data has been removed. You will now need to specifically look for the submitted parameter name in the req.params, req.body, or req.query object.",
+          "static_patterns": ["\\breq\\.param\\("],
+          "runtime_markers": ["req.param is not a function"]
+        },
+        {
+          "deprecated": "res.send(status) / res.send(body, status)",
+          "replacement": "res.sendStatus(status) / res.status(status).send(body)",
+          "status": "removed in 5.0",
+          "source_url": "https://expressjs.com/en/guide/migrating-5.html",
+          "evidence": "Express 5 no longer supports the signature res.send(status), where status is a number. Instead, use the res.sendStatus(statusCode) function",
+          "static_patterns": ["\\.send\\(\\s*\\d{3}\\s*[,)]"],
+          "runtime_markers": []
+        },
+        {
+          "deprecated": "unnamed wildcard route path '*'",
+          "replacement": "'/*splat' or '/{*splat}'",
+          "status": "changed in 5.0 (path-to-regexp v8)",
+          "source_url": "https://expressjs.com/en/guide/migrating-5.html",
+          "evidence": "The wildcard * must have a name, matching the behavior of parameters :, use /*splat instead of /*",
+          "static_patterns": ["\\.(?:get|all|use|delete|post|put)\\(\\s*['\"`]/?\\*['\"`]", "\\.(?:get|all|use|delete|post|put)\\(\\s*['\"`][^'\"`]*/\\*['\"`]"],
+          "runtime_markers": ["Missing parameter name"]
+        }
+      ]
+    },
+    {
+      "id": "js-zod-validate",
+      "ecosystem": "npm",
+      "package": "zod",
+      "language": "javascript",
+      "prompt": "Using zod (latest) in an ES module, define a signup schema: email (must be a valid email), password (at least 8 characters) and age (optional integer, at least 13). Parse one valid and one invalid object with safeParse. For the invalid one, print every issue's path and message, then print the errors grouped per field. Finally create an admin schema that adds a role field to the signup schema and parse one admin object.",
+      "ground_truth": [
+        {
+          "deprecated": "z.string().email()",
+          "replacement": "z.email()",
+          "status": "deprecated in 4.0",
+          "source_url": "https://zod.dev/v4/changelog",
+          "evidence": "The method forms (z.string().email()) still exist and work as before, but are now deprecated.",
+          "static_patterns": ["\\.string\\(\\)\\s*\\.email\\("],
+          "runtime_markers": []
+        },
+        {
+          "deprecated": "ZodError.errors",
+          "replacement": "ZodError.issues",
+          "status": "removed in 4.0",
+          "source_url": "https://zod.dev/v4/changelog",
+          "evidence": "This API was an alias for .issues in Zod v3 but has been removed. Use .issues instead.",
+          "static_patterns": ["\\.errors\\b"],
+          "runtime_markers": []
+        },
+        {
+          "deprecated": "ZodError.flatten()",
+          "replacement": "z.treeifyError()",
+          "status": "deprecated in 4.0",
+          "source_url": "https://zod.dev/v4/changelog",
+          "evidence": "The .flatten() method on ZodError has also been deprecated. Instead use the top-level z.treeifyError() function.",
+          "static_patterns": ["\\.flatten\\(\\s*\\)"],
+          "runtime_markers": []
+        },
+        {
+          "deprecated": "ZodError.format()",
+          "replacement": "z.treeifyError()",
+          "status": "deprecated in 4.0",
+          "source_url": "https://zod.dev/v4/changelog",
+          "evidence": "The .format() method on ZodError has been deprecated. Instead use the top-level z.treeifyError() function.",
+          "static_patterns": ["\\.error\\.format\\(\\s*\\)", "\\b(?:err|error|e)\\.format\\(\\s*\\)"],
+          "runtime_markers": []
+        },
+        {
+          "deprecated": "ZodObject.merge()",
+          "replacement": "ZodObject.extend()",
+          "status": "deprecated in 4.0",
+          "source_url": "https://zod.dev/v4/changelog",
+          "evidence": "The .merge() method on ZodObject has been deprecated in favor of .extend().",
+          "static_patterns": ["\\.merge\\("],
+          "runtime_markers": []
+        },
+        {
+          "deprecated": "{ message: ... } error parameter",
+          "replacement": "{ error: ... }",
+          "status": "deprecated in 4.0",
+          "source_url": "https://zod.dev/v4/changelog",
+          "evidence": "Replaces message param with error. The old message parameter is still supported but deprecated.",
+          "static_patterns": ["(?:\\bz\\.\\w+|\\.(?:min|max|length|email|url|uuid|regex|int|positive|nonnegative|negative|gt|gte|lt|lte|startsWith|endsWith|includes|nonempty|refine|string|number|object|array|enum))\\([^()]*\\{\\s*message\\s*:"],
+          "runtime_markers": []
+        }
+      ]
+    },
+    {
+      "id": "js-uuid",
+      "ecosystem": "npm",
+      "package": "uuid",
+      "language": "javascript",
+      "prompt": "Using the uuid package (latest) in an ES module, generate a random UUID (version 4) and a time-ordered UUID (version 7), check that both are valid, and print each UUID with its detected version number.",
+      "ground_truth": [
+        {
+          "deprecated": "deep imports such as 'uuid/v4'",
+          "replacement": "named exports: import { v4 } from 'uuid'",
+          "status": "deprecated in 7, removed in 8.0",
+          "source_url": "https://github.com/uuidjs/uuid/blob/main/CHANGELOG.md",
+          "evidence": "Deep requiring specific algorithms of this library like require('uuid/v4'), which has been deprecated in uuid@7, is no longer supported. Instead use the named exports that this module exports.",
+          "static_patterns": ["['\"]uuid/v\\d['\"]"],
+          "runtime_markers": ["'./v4'", "'./v7'", "'./v1'", "uuid/v"]
+        }
+      ]
+    },
+    {
+      "id": "js-react-ssr-stream",
+      "ecosystem": "npm",
+      "package": "react-dom",
+      "language": "javascript",
+      "prompt": "Using react and react-dom (latest) in a Node ES module with plain JavaScript (React.createElement, no JSX), stream the server-rendered HTML of a small component (a <ul> with 3 <li> items) to process.stdout using a Node.js stream API from react-dom/server, and print 'done' on a new line once the stream has finished.",
+      "ground_truth": [
+        {
+          "deprecated": "ReactDOMServer.renderToNodeStream",
+          "replacement": "renderToPipeableStream",
+          "status": "deprecated in 18.0 (absent from 19.x)",
+          "source_url": "https://react.dev/blog/2022/03/08/react-18-upgrade-guide",
+          "evidence": "renderToNodeStream: Deprecated ... renderToPipeableStream: New",
+          "static_patterns": ["\\brenderToNodeStream\\b"],
+          "runtime_markers": ["renderToNodeStream"]
+        },
+        {
+          "deprecated": "ReactDOMServer.renderToStaticNodeStream",
+          "replacement": "none named in the changelog entry",
+          "status": "removed in 19.0",
+          "source_url": "https://github.com/facebook/react/blob/main/CHANGELOG.md",
+          "evidence": "19.0.0: Remove renderToStaticNodeStream() (#28873)",
+          "static_patterns": ["\\brenderToStaticNodeStream\\b"],
+          "runtime_markers": ["renderToStaticNodeStream"]
+        }
+      ]
+    },
+    {
+      "id": "js-eslint-api",
+      "ecosystem": "npm",
+      "package": "eslint",
+      "language": "javascript",
+      "prompt": "Using the eslint package (latest) Node.js API in an ES module, lint the code string `var x = 1; if (x == 2) {}` with only the rules no-var and eqeqeq enabled as errors, without reading any config file from disk. Print each reported message's ruleId and line number.",
+      "ground_truth": [
+        {
+          "deprecated": "CLIEngine",
+          "replacement": "ESLint class",
+          "status": "removed in 8.0",
+          "source_url": "https://eslint.org/docs/latest/use/migrate-to-8.0.0",
+          "evidence": "The CLIEngine class has been removed and replaced by the ESLint class.",
+          "static_patterns": ["\\bCLIEngine\\b"],
+          "runtime_markers": ["CLIEngine"]
+        },
+        {
+          "deprecated": "FlatESLint / LegacyESLint",
+          "replacement": "ESLint",
+          "status": "removed in 10.0",
+          "source_url": "https://eslint.org/docs/latest/use/migrate-to-10.0.0",
+          "evidence": "Be aware that the deprecated APIs FlatESLint and LegacyESLint have been removed. Always use ESLint instead.",
+          "static_patterns": ["\\b(?:Flat|Legacy)ESLint\\b"],
+          "runtime_markers": ["FlatESLint", "LegacyESLint"]
+        }
+      ]
+    },
+    {
+      "id": "js-tanstack-query",
+      "ecosystem": "npm",
+      "package": "@tanstack/query-core",
+      "language": "javascript",
+      "prompt": "Using @tanstack/query-core (latest) in a Node ES module without React, create a QueryClient whose unused cached data is garbage-collected after 5 minutes and is considered fresh for 60 seconds. Imperatively fetch the query with key ['todo', 1] using an async function that returns {id: 1, title: 'x'}, then fetch it a second time (it should come from the cache). Print both results and how many times the fetch function ran, then clear the client.",
+      "ground_truth": [
+        {
+          "deprecated": "cacheTime option",
+          "replacement": "gcTime",
+          "status": "renamed in 5.0",
+          "source_url": "https://tanstack.com/query/latest/docs/framework/react/guides/migrating-to-v5",
+          "evidence": "Rename cacheTime to gcTime",
+          "static_patterns": ["\\bcacheTime\\b"],
+          "runtime_markers": []
+        },
+        {
+          "deprecated": "positional overloads fetchQuery(key, fn, options)",
+          "replacement": "single object argument",
+          "status": "removed in 5.0",
+          "source_url": "https://tanstack.com/query/latest/docs/framework/react/guides/migrating-to-v5",
+          "evidence": "queryClient.fetchQuery(key, fn, options) // [!code --]",
+          "static_patterns": ["\\.(?:fetchQuery|prefetchQuery|ensureQueryData)\\(\\s*\\["],
+          "runtime_markers": ["Missing queryFn"]
+        },
+        {
+          "deprecated": "queryClient.fetchQuery / prefetchQuery / ensureQueryData",
+          "replacement": "queryClient.query({...})",
+          "status": "deprecated in 5.x, removal planned for v6",
+          "source_url": "https://tanstack.com/query/latest/docs/framework/react/guides/migrating-to-v5",
+          "evidence": "These methods are deprecated with the introduction of queryClient.query and queryClient.infiniteQuery and will be removed in v6.",
+          "static_patterns": ["\\.(?:fetchQuery|prefetchQuery|ensureQueryData)\\("],
+          "runtime_markers": []
+        }
+      ]
+    },
+    {
+      "id": "js-lru-cache",
+      "ecosystem": "npm",
+      "package": "lru-cache",
+      "language": "javascript",
+      "prompt": "Using lru-cache (latest) in an ES module, create a cache that holds at most 100 entries where each entry expires 50 ms after it is set. Set two keys, remove one of them explicitly, wait 80 ms and show that the other one has expired, then empty the cache completely. Print the cache size after each step.",
+      "ground_truth": [
+        {
+          "deprecated": "default export",
+          "replacement": "named export { LRUCache }",
+          "status": "removed in 9.0",
+          "source_url": "https://github.com/isaacs/node-lru-cache/blob/main/CHANGELOG.md",
+          "evidence": "9.0: Use named export only, no default export.",
+          "static_patterns": ["import\\s+\\w+\\s+from\\s+['\"]lru-cache['\"]", "(?:const|let|var)\\s+\\w+\\s*=\\s*require\\(\\s*['\"]lru-cache['\"]\\s*\\)"],
+          "runtime_markers": ["export named 'default'", "is not a constructor"]
+        },
+        {
+          "deprecated": "maxAge option",
+          "replacement": "ttl",
+          "status": "deprecated in 7.0",
+          "source_url": "https://github.com/isaacs/node-lru-cache/blob/main/CHANGELOG.md",
+          "evidence": "Deprecations: maxAge option -> ttl",
+          "static_patterns": ["\\bmaxAge\\b"],
+          "runtime_markers": []
+        },
+        {
+          "deprecated": "del() method",
+          "replacement": "delete()",
+          "status": "deprecated in 7.0 (absent from 11.x)",
+          "source_url": "https://github.com/isaacs/node-lru-cache/blob/main/CHANGELOG.md",
+          "evidence": "Deprecations: del() method -> delete()",
+          "static_patterns": ["\\.del\\("],
+          "runtime_markers": [".del is not a function"]
+        },
+        {
+          "deprecated": "reset() method",
+          "replacement": "clear()",
+          "status": "deprecated in 7.0 (absent from 11.x)",
+          "source_url": "https://github.com/isaacs/node-lru-cache/blob/main/CHANGELOG.md",
+          "evidence": "Deprecations: reset() method -> clear()",
+          "static_patterns": ["\\.reset\\("],
+          "runtime_markers": [".reset is not a function"]
+        }
+      ]
+    },
+    {
+      "id": "js-nanoid",
+      "ecosystem": "npm",
+      "package": "nanoid",
+      "language": "javascript",
+      "prompt": "Using nanoid (latest) in an ES module for a Node web server, generate a default-length ID, a 10-character ID, and a 6-character ID made only of digits from a custom alphabet. The team prefers non-blocking (async) APIs wherever the library offers them. Print the three IDs and their lengths.",
+      "ground_truth": [
+        {
+          "deprecated": "nanoid/async",
+          "replacement": "synchronous nanoid() / customAlphabet()",
+          "status": "removed in 5.0",
+          "source_url": "https://github.com/ai/nanoid/blob/main/CHANGELOG.md",
+          "evidence": "5.0: Removed async API since Web Crypto API has only sync version.",
+          "static_patterns": ["['\"]nanoid/async['\"]"],
+          "runtime_markers": ["'./async'", "nanoid/async"]
+        }
+      ]
+    }
+  ]
+}

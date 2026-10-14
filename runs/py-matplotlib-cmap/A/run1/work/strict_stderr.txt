@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/Users/Admin/Documents/New project/coding_agent_package/runs/py-matplotlib-cmap/A/run1/work/main.py", line 6, in <module>
+    import matplotlib.colormaps as cmaps
+ModuleNotFoundError: No module named 'matplotlib.colormaps'

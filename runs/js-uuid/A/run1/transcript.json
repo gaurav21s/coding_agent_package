@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "You are a coding agent. Today's date is 2026-10-12.\nWrite a complete program that works with the latest released version of every library it uses, as installed today.\nDo not use deprecated or removed APIs. If tools are available to you, first use them to look up the current version of each library and its changelog or migration guide, then write the code.\nThe program must run offline, finish on its own, and print its results.\nEnd your reply with exactly one fenced code block that holds the whole program."
+ },
+ {
+  "role": "user",
+  "content": "Using the uuid package (latest) in an ES module, generate a random UUID (version 4) and a time-ordered UUID (version 7), check that both are valid, and print each UUID with its detected version number.\n\nTarget: Node.js 22, ES module saved as main.mjs, run as `node main.mjs`."
+ },
+ {
+  "role": "assistant",
+  "content": "To generate UUIDs in Node.js using the `uuid` package (currently version 11.0.3), you can use the `v4` and `v7` functions. The `validate` and `version` functions from the same package allow for verification and inspection.\n\nEnsure you have initialized your project and installed the package:\n`npm init -y`\n`npm pkg set type=\"module\"`\n`npm install uuid`\n\nHere is the `main.mjs` program:\n\n```javascript\nimport { v4 as uuidv4, v7 as uuidv7, validate, version } from 'uuid';\n\n/**\n * Generates and validates UUIDs of version 4 and 7.\n */\nfunction run() {\n    // Generate UUIDs\n    const idV4 = uuidv4();\n    const idV7 = uuidv7();\n\n    const uuids = [\n        { id: idV4, expectedVersion: 4 },\n        { id: idV7, expectedVersion: 7 }\n    ];\n\n    uuids.forEach(({ id, expectedVersion }) => {\n        // Validate format\n        const isValid = validate(id);\n        \n        // Detect version\n        const detectedVersion = version(id);\n\n        console.log(`UUID: ${id}`);\n        console.log(`- Valid: ${isValid}`);\n        console.log(`- Detected Version: ${detectedVersion}`);\n        console.log(`- Matches Expected Version (${expectedVersion}): ${detectedVersion === expectedVersion}`);\n        console.log('---');\n    });\n}\n\nrun();\n```"
+ }
+]

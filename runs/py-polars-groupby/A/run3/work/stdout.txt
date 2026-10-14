@@ -1,0 +1,28 @@
+--- Aggregated Stats per Region ---
+shape: (4, 3)
+┌────────┬──────────────┬─────────────┐
+│ region ┆ total_amount ┆ mean_amount │
+│ ---    ┆ ---          ┆ ---         │
+│ str    ┆ f64          ┆ f64         │
+╞════════╪══════════════╪═════════════╡
+│ East   ┆ 200.0        ┆ 200.0       │
+│ North  ┆ 270.0        ┆ 135.0       │
+│ South  ┆ 130.0        ┆ 65.0        │
+│ West   ┆ 95.0         ┆ 95.0        │
+└────────┴──────────────┴─────────────┘
+
+
+--- Original DataFrame with 'size' column ---
+shape: (6, 4)
+┌────────┬─────────┬────────┬───────┐
+│ region ┆ product ┆ amount ┆ size  │
+│ ---    ┆ ---     ┆ ---    ┆ ---   │
+│ str    ┆ str     ┆ f64    ┆ str   │
+╞════════╪═════════╪════════╪═══════╡
+│ North  ┆ A       ┆ 150.0  ┆ big   │
+│ South  ┆ B       ┆ 80.0   ┆ small │
+│ North  ┆ C       ┆ 120.0  ┆ big   │
+│ East   ┆ A       ┆ 200.0  ┆ big   │
+│ South  ┆ B       ┆ 50.0   ┆ small │
+│ West   ┆ C       ┆ 95.0   ┆ small │
+└────────┴─────────┴────────┴───────┘

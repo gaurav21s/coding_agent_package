@@ -1,0 +1,57 @@
+{
+ "agent": "B",
+ "task_id": "js-tanstack-query",
+ "model": "google/gemini-3.1-flash-lite",
+ "stop_reason": "answered",
+ "code": "import { QueryClient } from '@tanstack/query-core';\n\n// 1. Configure QueryClient\nconst queryClient = new QueryClient({\n  defaultOptions: {\n    queries: {\n      gcTime: 5 * 60 * 1000, // 5 minutes\n      staleTime: 60 * 1000,  // 60 seconds\n    },\n  },\n});\n\nlet fetchCount = 0;\n\nconst fetchTodo = async () => {\n  fetchCount++;\n  return { id: 1, title: 'x' };\n};\n\nasync function run() {\n  const queryKey = ['todo', 1];\n\n  // 2. First fetch\n  const result1 = await queryClient.fetchQuery({\n    queryKey,\n    queryFn: fetchTodo,\n  });\n\n  // 3. Second fetch (should be cached)\n  const result2 = await queryClient.fetchQuery({\n    queryKey,\n    queryFn: fetchTodo,\n  });\n\n  console.log('Result 1:', result1);\n  console.log('Result 2:', result2);\n  console.log('Fetch function ran times:', fetchCount);\n\n  // 4. Clear the client\n  queryClient.clear();\n  console.log('Client cleared.');\n}\n\nrun().catch(console.error);\n",
+ "tool_log": [
+  {
+   "tool": "run_scraper",
+   "args": {
+    "dataset_id": "gd_mk57m0301khq4jmsul",
+    "method": "collect_by_url",
+    "input": [
+     {
+      "package_name": "@tanstack/query-core"
+     }
+    ]
+   },
+   "page": 0,
+   "cached": true,
+   "live_requests": 0,
+   "is_error": false,
+   "chars": 1042
+  },
+  {
+   "tool": "discover",
+   "args": {
+    "query": "@tanstack/query-core v5 documentation queryclient configuration gcTime staleTime"
+   },
+   "page": 0,
+   "cached": false,
+   "live_requests": 1,
+   "is_error": true,
+   "chars": 701
+  },
+  {
+   "tool": "scrape_as_markdown",
+   "args": {
+    "url": "https://tanstack.com/query/latest/docs/framework/react/guides/caching"
+   },
+   "page": 0,
+   "cached": true,
+   "live_requests": 0,
+   "is_error": false,
+   "chars": 18185
+  }
+ ],
+ "prompt_tokens": 8781,
+ "completion_tokens": 578,
+ "cost_usd": 0.00306225,
+ "llm_calls": 4,
+ "tool_calls": 3,
+ "tool_errors": 1,
+ "bd_requests": 1,
+ "bd_cache_hits": 2,
+ "latency_s": 7.12
+}

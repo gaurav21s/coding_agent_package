@@ -1,0 +1,2 @@
+Fetched Book: Book(id=1, title='The Great Gatsby', author='F. Scott Fitzgerald')
+Total Row Count (via raw SQL): 2

@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "You are a coding agent. Today's date is 2026-10-12.\nWrite a complete program that works with the latest released version of every library it uses, as installed today.\nDo not use deprecated or removed APIs. If tools are available to you, first use them to look up the current version of each library and its changelog or migration guide, then write the code.\nThe program must run offline, finish on its own, and print its results.\nEnd your reply with exactly one fenced code block that holds the whole program."
+ },
+ {
+  "role": "user",
+  "content": "Using react and react-dom (latest) in a Node ES module with plain JavaScript (React.createElement, no JSX), stream the server-rendered HTML of a small component (a <ul> with 3 <li> items) to process.stdout using a Node.js stream API from react-dom/server, and print 'done' on a new line once the stream has finished.\n\nTarget: Node.js 22, ES module saved as main.mjs, run as `node main.mjs`."
+ },
+ {
+  "role": "assistant",
+  "content": "To achieve server-side streaming of React components in Node.js, we use the `renderToPipeableStream` method from `react-dom/server`. Since we are using plain JavaScript without JSX, we use `React.createElement`.\n\nAs of October 2026, `react` and `react-dom` are at version 19.x. The following code uses the standard Node.js `Writable` stream interface to pipe the output to `process.stdout`.\n\n```javascript\nimport React from 'react';\nimport { renderToPipeableStream } from 'react-dom/server';\n\n/**\n * A simple component represented as a function.\n * Using React.createElement instead of JSX.\n */\nfunction ListComponent() {\n  return React.createElement(\n    'ul',\n    null,\n    React.createElement('li', null, 'Item 1'),\n    React.createElement('li', null, 'Item 2'),\n    React.createElement('li', null, 'Item 3')\n  );\n}\n\n// Create the stream from the component\nconst stream = renderToPipeableStream(React.createElement(ListComponent), {\n  onShellReady() {\n    // Pipe the stream to stdout\n    stream.pipe(process.stdout);\n  },\n  onAllReady() {\n    // Print 'done' once the stream has finished\n    process.stdout.write('\\ndone\\n');\n  },\n  onError(error) {\n    console.error(error);\n  }\n});\n```\n\n### How to run:\n1. Ensure you have `react` and `react-dom` installed:\n   `npm install react react-dom`\n2. Save the code above as `main.mjs`.\n3. Run the program:\n   `node main.mjs`\n\nThis script will output the HTML string of the `<ul>` list followed by the word \"done\" on a new line."
+ }
+]

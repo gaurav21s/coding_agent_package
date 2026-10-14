@@ -1,0 +1,46 @@
+{
+ "agent": "B",
+ "task_id": "py-matplotlib-cmap",
+ "model": "google/gemini-3.1-flash-lite",
+ "stop_reason": "answered",
+ "code": "import matplotlib\n# Set the backend to Agg before importing pyplot or other modules\nmatplotlib.use('Agg')\n\nimport matplotlib.pyplot as plt\nimport matplotlib.cm as cm\nimport numpy as np\n\ndef main():\n    # 1. Look up the 'viridis' colormap object\n    # Using matplotlib.colormaps (available since 3.6)\n    viridis = matplotlib.colormaps['viridis']\n\n    # 2. Sample 5 evenly spaced RGBA colors\n    # Generate 5 values between 0 and 1\n    indices = np.linspace(0, 1, 5)\n    colors = viridis(indices)\n\n    # Print the colors\n    print(\"5 evenly spaced RGBA colors from 'viridis':\")\n    for i, color in enumerate(colors):\n        print(f\"Color {i+1}: {color}\")\n\n    # 3. Save a 5-bar bar chart using those colors\n    fig, ax = plt.subplots()\n    x = np.arange(5)\n    heights = [1, 2, 3, 4, 5]\n    \n    ax.bar(x, heights, color=colors)\n    ax.set_title(\"5-bar chart with Viridis colors\")\n    \n    # Save to bars.png\n    fig.savefig('bars.png')\n    print(\"\\nChart saved to 'bars.png'.\")\n\nif __name__ == \"__main__\":\n    main()\n",
+ "tool_log": [
+  {
+   "tool": "run_scraper",
+   "args": {
+    "input": [
+     {
+      "package_name": "matplotlib"
+     }
+    ],
+    "dataset_id": "gd_mk57kc3t1wwgmnepp9",
+    "method": "collect_by_url"
+   },
+   "page": 0,
+   "cached": true,
+   "live_requests": 0,
+   "is_error": false,
+   "chars": 3112
+  },
+  {
+   "tool": "scrape_as_markdown",
+   "args": {
+    "url": "https://matplotlib.org/stable/api/cm_api.html"
+   },
+   "page": 0,
+   "cached": true,
+   "live_requests": 0,
+   "is_error": false,
+   "chars": 111087
+  }
+ ],
+ "prompt_tokens": 8018,
+ "completion_tokens": 500,
+ "cost_usd": 0.001888925,
+ "llm_calls": 3,
+ "tool_calls": 2,
+ "tool_errors": 0,
+ "bd_requests": 0,
+ "bd_cache_hits": 2,
+ "latency_s": 4.9
+}

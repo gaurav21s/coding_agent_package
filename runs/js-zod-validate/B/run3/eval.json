@@ -1,0 +1,24 @@
+{
+ "code_extracted": true,
+ "deprecated_static": 2,
+ "deprecated_static_items": {
+  "z.string().email()": 1,
+  "ZodError.flatten()": 1
+ },
+ "runs": true,
+ "timeout": false,
+ "strict_runs": true,
+ "strict_failed_on_deprecation": false,
+ "deprecated_runtime": 0,
+ "deprecation_warnings": [],
+ "removed_api_errors": 0,
+ "hallucinated": 0,
+ "hallucinated_symbols": [],
+ "removed_api_symbols": [],
+ "error_type": null,
+ "error_message": null,
+ "gt_items_hit": [
+  "ZodError.flatten()",
+  "z.string().email()"
+ ]
+}

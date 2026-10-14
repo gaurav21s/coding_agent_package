@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "You are a coding agent. Today's date is 2026-10-12.\nWrite a complete program that works with the latest released version of every library it uses, as installed today.\nDo not use deprecated or removed APIs. If tools are available to you, first use them to look up the current version of each library and its changelog or migration guide, then write the code.\nThe program must run offline, finish on its own, and print its results.\nEnd your reply with exactly one fenced code block that holds the whole program."
+ },
+ {
+  "role": "user",
+  "content": "Using matplotlib with the non-interactive Agg backend, look up the 'viridis' colormap object by name through the matplotlib colormap API (not pyplot), sample 5 evenly spaced RGBA colors from it, print them, and save a 5-bar bar chart using those colors to bars.png in the current directory.\n\nTarget: Python 3.11, run as `python main.py`."
+ },
+ {
+  "role": "assistant",
+  "content": "To accomplish this task, we use `matplotlib.colormaps` (the modern, preferred API for accessing colormaps) and the `matplotlib.backends.backend_agg` backend to ensure the script runs in non-interactive environments.\n\nThe following program:\n1. Sets the backend to `Agg` before importing `pyplot`.\n2. Retrieves the 'viridis' colormap using `matplotlib.colormaps`.\n3. Samples 5 colors using `np.linspace` to generate indices from 0 to 1.\n4. Prints the RGBA values.\n5. Generates a bar chart and saves it to `bars.png`.\n\n```python\nimport matplotlib\n# Set the backend to Agg before importing pyplot to ensure non-interactive mode\nmatplotlib.use('Agg')\n\nimport matplotlib.pyplot as plt\nimport matplotlib.colormaps as cmaps\nimport numpy as np\n\ndef main():\n    # 1. Look up the 'viridis' colormap object\n    viridis = cmaps['viridis']\n\n    # 2. Sample 5 evenly spaced RGBA colors\n    # np.linspace(0, 1, 5) gives [0.0, 0.25, 0.5, 0.75, 1.0]\n    indices = np.linspace(0, 1, 5)\n    colors = [viridis(i) for i in indices]\n\n    # Print the colors\n    print(\"5 sampled RGBA colors from viridis:\")\n    for i, color in enumerate(colors):\n        print(f\"Color {i+1}: {color}\")\n\n    # 3. Create a 5-bar bar chart\n    fig, ax = plt.subplots()\n    x = np.arange(1, 6)\n    heights = [10, 20, 15, 25, 30]\n    \n    ax.bar(x, heights, color=colors)\n    ax.set_title(\"Viridis 5-Bar Chart\")\n    ax.set_xlabel(\"Bar Index\")\n    ax.set_ylabel(\"Value\")\n\n    # 4. Save to bars.png\n    plt.savefig('bars.png')\n    print(\"\\nChart saved successfully as 'bars.png'.\")\n\nif __name__ == \"__main__\":\n    main()\n```"
+ }
+]

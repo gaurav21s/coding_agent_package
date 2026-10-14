@@ -1,0 +1,9 @@
+--- Validating Good Input ---
+Success: name='Alice' email='alice@example.com' age=30
+
+--- Validating Bad Input ---
+Caught expected validation error:
+1 validation error for User
+age
+  Value error, Age cannot be negative [type=value_error, input_value=-5, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.14/v/value_error
