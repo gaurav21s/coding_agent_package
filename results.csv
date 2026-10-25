@@ -44,6 +44,9 @@ py-sklearn-rmse,pypi,scikit-learn,B,3,google/gemini-3.1-flash-lite,True,False,Fa
 py-sklearn-rmse,pypi,scikit-learn,C,1,google/gemini-3.1-flash-lite,True,True,True,False,0,0,0,0,False,0,,1787,406,2193,1,1,0,0,0,8.1,0.001056,answered,,,
 py-sklearn-rmse,pypi,scikit-learn,C,2,google/gemini-3.1-flash-lite,True,True,True,False,0,0,0,0,False,0,,1787,406,2193,1,1,0,0,0,2.1,0.001056,answered,,,
 py-sklearn-rmse,pypi,scikit-learn,C,3,google/gemini-3.1-flash-lite,True,True,True,False,0,0,0,0,False,0,,1787,406,2193,1,1,0,0,0,2.14,0.001056,answered,,,
+py-sklearn-rmse,pypi,scikit-learn,C2,1,google/gemini-3.1-flash-lite,True,True,True,False,0,0,0,0,False,0,,1868,440,2308,1,1,0,0,0,4.01,0.001127,answered,,,
+py-sklearn-rmse,pypi,scikit-learn,C2,2,google/gemini-3.1-flash-lite,True,True,True,False,0,0,0,0,False,0,,1868,440,2308,1,1,0,0,0,2.15,0.001127,answered,,,
+py-sklearn-rmse,pypi,scikit-learn,C2,3,google/gemini-3.1-flash-lite,True,True,True,False,0,0,0,0,False,0,,1868,440,2308,1,1,0,0,0,2.03,0.001127,answered,,,
 py-scipy-integrate,pypi,scipy,A,1,google/gemini-3.1-flash-lite,True,True,True,False,0,0,0,0,False,0,,197,392,589,1,0,0,0,0,4.02,0.000637,answered,,,
 py-scipy-integrate,pypi,scipy,A,2,google/gemini-3.1-flash-lite,True,True,True,False,0,0,0,0,False,0,,197,392,589,1,0,0,0,0,2.13,0.000637,answered,,,
 py-scipy-integrate,pypi,scipy,A,3,google/gemini-3.1-flash-lite,True,True,True,False,0,0,0,0,False,0,,197,392,589,1,0,0,0,0,1.98,0.000637,answered,,,
@@ -83,6 +86,9 @@ js-express-routes,npm,express,B,3,google/gemini-3.1-flash-lite,True,False,False,
 js-express-routes,npm,express,C,1,google/gemini-3.1-flash-lite,True,False,False,False,2,1,1,1,True,0,TypeError,1930,390,2320,1,1,0,0,0,6.54,0.001068,answered,unnamed wildcard route path '*',,Missing parameter name at index 2: /*; visit https://git.new/pathToRegexpError for info
 js-express-routes,npm,express,C,2,google/gemini-3.1-flash-lite,True,False,False,False,2,1,1,1,True,0,TypeError,1930,390,2320,1,1,0,0,0,3.39,0.001068,answered,unnamed wildcard route path '*',,Missing parameter name at index 2: /*; visit https://git.new/pathToRegexpError for info
 js-express-routes,npm,express,C,3,google/gemini-3.1-flash-lite,True,False,False,False,2,1,1,1,True,0,TypeError,1930,390,2320,1,1,0,0,0,3.08,0.001068,answered,unnamed wildcard route path '*',,Missing parameter name at index 2: /*; visit https://git.new/pathToRegexpError for info
+js-express-routes,npm,express,C2,1,google/gemini-3.1-flash-lite,True,True,True,False,0,0,0,0,False,0,,2430,449,2879,1,1,0,0,0,2.13,0.001281,answered,,,
+js-express-routes,npm,express,C2,2,google/gemini-3.1-flash-lite,True,True,True,False,0,0,0,0,False,0,,2430,449,2879,1,1,0,0,0,2.06,0.001281,answered,,,
+js-express-routes,npm,express,C2,3,google/gemini-3.1-flash-lite,True,True,True,False,0,0,0,0,False,0,,2430,449,2879,1,1,0,0,0,3.59,0.001281,answered,,,
 js-zod-validate,npm,zod,A,1,google/gemini-3.1-flash-lite,True,True,True,False,2,0,0,2,True,0,,243,654,897,1,0,0,0,0,2.73,0.001042,answered,ZodError.flatten(); z.string().email(),,
 js-zod-validate,npm,zod,A,2,google/gemini-3.1-flash-lite,True,True,True,False,2,0,0,2,True,0,,243,654,897,1,0,0,0,0,2.53,0.001042,answered,ZodError.flatten(); z.string().email(),,
 js-zod-validate,npm,zod,A,3,google/gemini-3.1-flash-lite,True,True,True,False,2,0,0,2,True,0,,243,654,897,1,0,0,0,0,2.66,0.001042,answered,ZodError.flatten(); z.string().email(),,
@@ -92,6 +98,9 @@ js-zod-validate,npm,zod,B,3,google/gemini-3.1-flash-lite,True,True,True,False,2,
 js-zod-validate,npm,zod,C,1,google/gemini-3.1-flash-lite,True,True,True,False,0,0,0,0,False,0,,1924,579,2503,1,1,0,0,0,5.97,0.00135,answered,,,
 js-zod-validate,npm,zod,C,2,google/gemini-3.1-flash-lite,True,True,True,False,0,0,0,0,False,0,,1924,579,2503,1,1,0,0,0,3.29,0.00135,answered,,,
 js-zod-validate,npm,zod,C,3,google/gemini-3.1-flash-lite,True,True,True,False,0,0,0,0,False,0,,1924,579,2503,1,1,0,0,0,4.17,0.00135,answered,,,
+js-zod-validate,npm,zod,C2,1,google/gemini-3.1-flash-lite,True,True,True,False,0,0,0,0,False,0,,2530,527,3057,1,1,0,0,0,3.9,0.001423,answered,,,
+js-zod-validate,npm,zod,C2,2,google/gemini-3.1-flash-lite,True,True,True,False,0,0,0,0,False,0,,2530,527,3057,1,1,0,0,0,3.35,0.001423,answered,,,
+js-zod-validate,npm,zod,C2,3,google/gemini-3.1-flash-lite,True,True,True,False,0,0,0,0,False,0,,2530,527,3057,1,1,0,0,0,2.52,0.001423,answered,,,
 js-uuid,npm,uuid,A,1,google/gemini-3.1-flash-lite,True,True,True,False,0,0,0,0,False,0,,195,347,542,1,0,0,0,0,1.88,0.000569,answered,,,
 js-uuid,npm,uuid,A,2,google/gemini-3.1-flash-lite,True,True,True,False,0,0,0,0,False,0,,195,347,542,1,0,0,0,0,2.03,0.000569,answered,,,
 js-uuid,npm,uuid,A,3,google/gemini-3.1-flash-lite,True,True,True,False,0,0,0,0,False,0,,195,347,542,1,0,0,0,0,2.16,0.000569,answered,,,
@@ -113,6 +122,9 @@ js-eslint-api,npm,eslint,B,3,google/gemini-3.1-flash-lite,True,False,False,False
 js-eslint-api,npm,eslint,C,1,google/gemini-3.1-flash-lite,True,False,False,False,0,0,0,0,False,0,ESLintInvalidOptionsError,1458,380,1838,1,1,0,0,0,6.74,0.000935,answered,,,Invalid Options:
 js-eslint-api,npm,eslint,C,2,google/gemini-3.1-flash-lite,True,False,False,False,0,0,0,0,False,0,ESLintInvalidOptionsError,1458,380,1838,1,1,0,0,0,2.46,0.000935,answered,,,Invalid Options:
 js-eslint-api,npm,eslint,C,3,google/gemini-3.1-flash-lite,True,False,False,False,0,0,0,0,False,0,ESLintInvalidOptionsError,1458,380,1838,1,1,0,0,0,2.68,0.000935,answered,,,Invalid Options:
+js-eslint-api,npm,eslint,C2,1,google/gemini-3.1-flash-lite,True,False,False,False,0,0,0,0,False,0,ESLintInvalidOptionsError,1234,357,1591,1,1,0,0,0,2.91,0.000844,answered,,,Invalid Options:
+js-eslint-api,npm,eslint,C2,2,google/gemini-3.1-flash-lite,True,False,False,False,0,0,0,0,False,0,ESLintInvalidOptionsError,1234,357,1591,1,1,0,0,0,3.53,0.000844,answered,,,Invalid Options:
+js-eslint-api,npm,eslint,C2,3,google/gemini-3.1-flash-lite,True,False,False,False,0,0,0,0,False,0,ESLintInvalidOptionsError,1234,357,1591,1,1,0,0,0,2.96,0.000844,answered,,,Invalid Options:
 js-tanstack-query,npm,@tanstack/query-core,A,1,google/gemini-3.1-flash-lite,True,True,True,False,2,0,0,1,True,0,,253,895,1148,1,0,0,0,0,3.16,0.001406,answered,queryClient.fetchQuery / prefetchQuery / ensureQueryData,,
 js-tanstack-query,npm,@tanstack/query-core,A,2,google/gemini-3.1-flash-lite,True,True,True,False,2,0,0,1,True,0,,253,895,1148,1,0,0,0,0,3.32,0.001406,answered,queryClient.fetchQuery / prefetchQuery / ensureQueryData,,
 js-tanstack-query,npm,@tanstack/query-core,A,3,google/gemini-3.1-flash-lite,True,True,True,False,2,0,0,1,True,0,,253,895,1148,1,0,0,0,0,3.49,0.001406,answered,queryClient.fetchQuery / prefetchQuery / ensureQueryData,,
@@ -122,6 +134,9 @@ js-tanstack-query,npm,@tanstack/query-core,B,3,google/gemini-3.1-flash-lite,True
 js-tanstack-query,npm,@tanstack/query-core,C,1,google/gemini-3.1-flash-lite,True,True,True,False,2,0,0,1,True,0,,1863,430,2293,1,1,0,0,0,5.82,0.001111,answered,queryClient.fetchQuery / prefetchQuery / ensureQueryData,,
 js-tanstack-query,npm,@tanstack/query-core,C,2,google/gemini-3.1-flash-lite,True,True,True,False,2,0,0,1,True,0,,1863,430,2293,1,1,0,0,0,3.18,0.001111,answered,queryClient.fetchQuery / prefetchQuery / ensureQueryData,,
 js-tanstack-query,npm,@tanstack/query-core,C,3,google/gemini-3.1-flash-lite,True,True,True,False,2,0,0,1,True,0,,1863,430,2293,1,1,0,0,0,2.0,0.001111,answered,queryClient.fetchQuery / prefetchQuery / ensureQueryData,,
+js-tanstack-query,npm,@tanstack/query-core,C2,1,google/gemini-3.1-flash-lite,True,True,True,False,2,0,0,1,True,0,,2122,618,2740,1,1,0,0,0,2.75,0.001458,answered,queryClient.fetchQuery / prefetchQuery / ensureQueryData,,
+js-tanstack-query,npm,@tanstack/query-core,C2,2,google/gemini-3.1-flash-lite,True,True,True,False,2,0,0,1,True,0,,2122,618,2740,1,1,0,0,0,2.68,0.001458,answered,queryClient.fetchQuery / prefetchQuery / ensureQueryData,,
+js-tanstack-query,npm,@tanstack/query-core,C2,3,google/gemini-3.1-flash-lite,True,True,True,False,2,0,0,1,True,0,,2122,618,2740,1,1,0,0,0,3.1,0.001458,answered,queryClient.fetchQuery / prefetchQuery / ensureQueryData,,
 js-lru-cache,npm,lru-cache,A,1,google/gemini-3.1-flash-lite,True,True,True,False,0,0,0,0,False,0,,223,600,823,1,0,0,0,0,2.61,0.000956,answered,,,
 js-lru-cache,npm,lru-cache,A,2,google/gemini-3.1-flash-lite,True,True,True,False,0,0,0,0,False,0,,223,600,823,1,0,0,0,0,3.1,0.000956,answered,,,
 js-lru-cache,npm,lru-cache,A,3,google/gemini-3.1-flash-lite,True,True,True,False,0,0,0,0,False,0,,223,600,823,1,0,0,0,0,2.91,0.000956,answered,,,
@@ -137,3 +152,6 @@ js-nanoid,npm,nanoid,B,3,google/gemini-3.1-flash-lite,True,False,False,False,2,1
 js-nanoid,npm,nanoid,C,1,google/gemini-3.1-flash-lite,True,True,True,False,0,0,0,0,False,0,,508,431,939,1,1,0,0,0,13.45,0.000773,answered,,,
 js-nanoid,npm,nanoid,C,2,google/gemini-3.1-flash-lite,True,True,True,False,0,0,0,0,False,0,,508,431,939,1,1,0,0,0,2.19,0.000773,answered,,,
 js-nanoid,npm,nanoid,C,3,google/gemini-3.1-flash-lite,True,True,True,False,0,0,0,0,False,0,,508,431,939,1,1,0,0,0,2.28,0.000773,answered,,,
+js-nanoid,npm,nanoid,C2,1,google/gemini-3.1-flash-lite,True,True,True,False,0,0,0,0,False,0,,510,314,824,1,1,0,0,0,2.11,0.000598,answered,,,
+js-nanoid,npm,nanoid,C2,2,google/gemini-3.1-flash-lite,True,True,True,False,0,0,0,0,False,0,,510,378,888,1,1,0,0,0,2.47,0.000695,answered,,,
+js-nanoid,npm,nanoid,C2,3,google/gemini-3.1-flash-lite,True,True,True,False,0,0,0,0,False,0,,510,378,888,1,1,0,0,0,8.31,0.000695,answered,,,

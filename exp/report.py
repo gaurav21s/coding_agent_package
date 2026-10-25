@@ -19,9 +19,11 @@ FIELDS = ["task_id", "ecosystem", "package", "agent", "run", "model", "code_extr
           "error_message"]
 
 # A: no tools. B: model-chosen Bright Data tools. C: harness-injected changelog (exp/agent_c.py).
-# C only ran on the tasks B got wrong, so it is never averaged against A and B over all 20.
-AGENTS = ("A", "B", "C")
-AGENT_LABEL = {"A": "A (no tools)", "B": "B (Bright Data)", "C": "C (changelog injected)"}
+# C2: the same, with filter v2 (links stripped, following code block kept, replacements injected).
+# C and C2 only ran on the tasks B got wrong, so they are never averaged against A and B over all 20.
+AGENTS = ("A", "B", "C", "C2")
+AGENT_LABEL = {"A": "A (no tools)", "B": "B (Bright Data)", "C": "C (changelog injected)",
+               "C2": "C2 (filter v2)"}
 
 
 def collect() -> list[dict]:
@@ -129,8 +131,9 @@ def changelog_table(rows: list[dict]) -> list[str]:
     for name, fn, d in metrics:
         cells = [_fmt(fn(by[a]), d) if by[a] else "n/a" for a in AGENTS]
         out.append(f"| {name} | " + " | ".join(cells) + " |")
-    out += ["", "| task | outdated runs A | outdated runs B | outdated runs C | ran A | ran B | ran C |",
-            "|---|---:|---:|---:|---:|---:|---:|"]
+    out += ["", "| task | " + " | ".join(f"outdated runs {a}" for a in AGENTS) + " | "
+            + " | ".join(f"ran {a}" for a in AGENTS) + " |",
+            "|---|" + "---:|" * (2 * len(AGENTS))]
     for tid in c_tasks:
         cells = []
         for key in ("deprecated_any", "runs"):
@@ -322,7 +325,9 @@ def main() -> None:
                "Agent B chose what to read and mostly read READMEs. Agent C removes the choice: the harness fetches the "
                "library's official changelog or migration guide, keeps only the lines announcing a deprecation, removal or "
                "rename, and puts them in the prompt. No tool loop, so the model cannot skip the page that matters. "
-               "See `exp/agent_c.py`.", ""] + cl + [""]
+               "C2 reruns it with filter v2, one rule per way the replacement went missing under v1: strip markdown "
+               "links before cutting a line (scikit-learn), keep the code block that follows a matched line "
+               "(TanStack), and inject each named replacement as code (Express). See `exp/agent_c.py`.", ""] + cl + [""]
         src = changelog_sources()
         if src:
             md += ["Where each changelog came from:", ""] + src + [""]

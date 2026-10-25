@@ -1,0 +1,32 @@
+{
+ "agent": "C2",
+ "task_id": "js-tanstack-query",
+ "model": "google/gemini-3.1-flash-lite",
+ "stop_reason": "answered",
+ "code": "import { QueryClient } from '@tanstack/query-core';\n\n// Initialize QueryClient with specified garbage collection and freshness settings\nconst queryClient = new QueryClient({\n  defaultOptions: {\n    queries: {\n      gcTime: 5 * 60 * 1000, // 5 minutes\n      staleTime: 60 * 1000,  // 60 seconds\n    },\n  },\n});\n\nlet fetchCount = 0;\n\nconst fetchTodo = async () => {\n  fetchCount++;\n  return { id: 1, title: 'x' };\n};\n\nasync function run() {\n  const queryKey = ['todo', 1];\n\n  // First fetch: should trigger the fetch function\n  const result1 = await queryClient.fetchQuery({\n    queryKey,\n    queryFn: fetchTodo,\n  });\n\n  // Second fetch: should return cached data (staleTime is 60s)\n  const result2 = await queryClient.fetchQuery({\n    queryKey,\n    queryFn: fetchTodo,\n  });\n\n  console.log('Result 1:', result1);\n  console.log('Result 2:', result2);\n  console.log('Fetch function ran times:', fetchCount);\n\n  // Clear the client\n  queryClient.clear();\n}\n\nrun().catch(console.error);\n",
+ "tool_log": [
+  {
+   "tool": "scrape_as_markdown",
+   "args": {
+    "url": "https://tanstack.com/query/latest/docs/framework/react/guides/migrating-to-v5"
+   },
+   "chars": 52005,
+   "kept_chars": 7559,
+   "replacements": []
+  }
+ ],
+ "changelog_source": "scrape_as_markdown",
+ "changelog_url": "https://tanstack.com/query/latest/docs/framework/react/guides/migrating-to-v5",
+ "changelog_kept_chars": 7559,
+ "filter": "v2",
+ "replacements": [],
+ "prompt_tokens": 2122,
+ "completion_tokens": 618,
+ "cost_usd": 0.0014575,
+ "llm_calls": 1,
+ "tool_calls": 1,
+ "tool_errors": 0,
+ "bd_requests": 0,
+ "bd_cache_hits": 0,
+ "latency_s": 2.75
+}

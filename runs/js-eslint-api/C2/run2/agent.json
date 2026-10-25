@@ -1,0 +1,36 @@
+{
+ "agent": "C2",
+ "task_id": "js-eslint-api",
+ "model": "google/gemini-3.1-flash-lite",
+ "stop_reason": "answered",
+ "code": "import { ESLint } from \"eslint\";\n\n/**\n * Linting code using the modern ESLint Flat Config API.\n * Rules:\n * - no-var: \"error\"\n * - eqeqeq: \"error\"\n */\nasync function runLint() {\n  const eslint = new ESLint({\n    useEslintrc: false,\n    overrideConfig: [\n      {\n        rules: {\n          \"no-var\": \"error\",\n          \"eqeqeq\": \"error\"\n        }\n      }\n    ]\n  });\n\n  const code = \"var x = 1; if (x == 2) {}\";\n  \n  // lintText returns an array of LintResult objects\n  const results = await eslint.lintText(code);\n\n  // Iterate through results and print ruleId and line number\n  for (const result of results) {\n    for (const message of result.messages) {\n      console.log(`Rule: ${message.ruleId}, Line: ${message.line}`);\n    }\n  }\n}\n\nrunLint().catch((error) => {\n  console.error(error);\n  process.exit(1);\n});\n",
+ "tool_log": [
+  {
+   "tool": "scrape_as_markdown",
+   "args": {
+    "url": "https://eslint.org/docs/latest/use/migrate-to-8.0.0"
+   },
+   "chars": 26545,
+   "kept_chars": 3529,
+   "replacements": [
+    "ESLint#getRulesMetaForResults()"
+   ]
+  }
+ ],
+ "changelog_source": "scrape_as_markdown",
+ "changelog_url": "https://eslint.org/docs/latest/use/migrate-to-8.0.0",
+ "changelog_kept_chars": 3529,
+ "filter": "v2",
+ "replacements": [
+  "ESLint#getRulesMetaForResults()"
+ ],
+ "prompt_tokens": 1234,
+ "completion_tokens": 357,
+ "cost_usd": 0.000844,
+ "llm_calls": 1,
+ "tool_calls": 1,
+ "tool_errors": 0,
+ "bd_requests": 0,
+ "bd_cache_hits": 0,
+ "latency_s": 3.53
+}

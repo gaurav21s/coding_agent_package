@@ -1,0 +1,3 @@
+DELETE /users/7: 204
+GET /search?q=x: 200, {"q":"x"}
+GET /nope: 404, not found

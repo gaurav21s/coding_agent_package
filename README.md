@@ -18,6 +18,7 @@ python3.11 -m exp.setup_sandbox      # clean venv + node sandbox with the latest
 python3.11 -m exp.bd_check           # confirms the token and the tool names, makes no tool calls
 python3.11 -m exp.run                # 20 tasks x A,B x 3 runs, then writes results.csv + summary.md
 python3.11 -m exp.agent_c            # the 6 tasks B got wrong, with the changelog injected
+python3.11 -m exp.agent_c --filter v2 # same, with the three filter rules (runs/<task>/C2/)
 python3.11 -m exp.report             # rebuild results.csv + summary.md
 ```
 
@@ -25,14 +26,20 @@ python3.11 -m exp.report             # rebuild results.csv + summary.md
 
 On those six libraries, 18 runs each:
 
-| | A (no tools) | B (Bright Data) | C (changelog injected) |
-|---|---:|---:|---:|
-| runs using an outdated API | 9 of 18 | 15 of 18 | **6 of 18** |
-| runs where the code ran | 12 of 18 | 6 of 18 | **12 of 18** |
-| prompt tokens per run | 235 | 11,267 | **1,578** |
-| mean seconds per run | 2.7 | 11.8 | **4.4** |
+| | A (no tools) | B (Bright Data) | C (changelog injected) | C2 (filter v2) |
+|---|---:|---:|---:|---:|
+| runs using an outdated API | 9 of 18 | 15 of 18 | 6 of 18 | **3 of 18** |
+| runs where the code ran | 12 of 18 | 6 of 18 | 12 of 18 | **15 of 18** |
+| prompt tokens per run | 235 | 11,267 | 1,578 | **1,782** |
+| mean seconds per run | 2.7 | 11.8 | 4.4 | **3.1** |
 
-zod, nanoid and scikit-learn came clean in all three runs. Express still wrote `app.get('/*')` with the line "use `/*splat` instead of `/*`" in its prompt. TanStack failed on the line filter, which kept "These methods are deprecated" while dropping the heading that named them. ESLint fails on a removed option the changelog never discusses.
+Under C, zod switched to `z.email()` and nanoid dropped `nanoid/async`. scikit-learn dropped `squared=False` but computed `np.sqrt(mse)` instead of calling `root_mean_squared_error`. The other three still failed, and two of them failed because the replacement never survived the filter:
+
+- **scikit-learn**: `scrape_as_markdown` keeps link markup, so the 284-character changelog sentence was 977 characters raw. v1 cut lines at 300 and `root_mean_squared_error` started at character 462.
+- **TanStack**: the deprecated methods and their replacements sit in a before/after code block under the sentence. v1 keeps lines that announce a change, and a line of code never does, so the block was dropped.
+- **Express**: the whole sentence, "use `/*splat` instead of `/*`", reached the model, and it wrote `app.get('/*')`.
+
+C2 (`--filter v2`) adds one rule for each: strip links before cutting a line, keep the code block that follows a matched line, and inject each named replacement as code. Express then wrote `app.get('/*splat')` and scikit-learn called `root_mean_squared_error`, both in all three runs. TanStack still wrote `fetchQuery({...})` with the before/after in its prompt; the task asks to "imperatively fetch the query", and the model followed the task. ESLint fails on a removed option the changelog never discusses. C2 cost no Bright Data credits because every changelog was already cached.
 
 Useful flags: `--agents A`, `--tasks js-uuid,py-pandas-append`, `--runs 1`, `--eval-only` (re-score saved code without model calls), `python3.11 -m exp.report` (rebuild the report only). Finished runs are skipped, so an interrupted run resumes.
 
@@ -46,7 +53,7 @@ Only the standard library is needed to drive the experiment. The libraries under
 - `exp/evaluate.py` does static matching, static symbol resolution, a normal run and a strict run (`-W error::DeprecationWarning` or `node --throw-deprecation`). Generated code runs under macOS `sandbox-exec` with outbound network blocked except loopback.
 - `exp/agent_c.py` is the changelog-first agent: one fetch, one filter, one model call.
 - `runs/<task>/<agent>/run<k>/` holds the transcript, final reply, extracted code, agent stats, evaluation, stdout/stderr and the strict-run stderr.
-- `results.csv` has one row per run, for agents A, B and C. `summary.md` holds the A vs B tables, every task, and where B did not help.
+- `results.csv` has one row per run, for agents A, B, C and C2. `summary.md` holds the A vs B tables, every task, and where B did not help.
 
 ## Bright Data tool names
 

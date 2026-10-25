@@ -150,29 +150,29 @@ What the unique (cached) Bright Data responses contained:
 
 ## Agent C: fetching the changelog in code
 
-Agent B chose what to read and mostly read READMEs. Agent C removes the choice: the harness fetches the library's official changelog or migration guide, keeps only the lines announcing a deprecation, removal or rename, and puts them in the prompt. No tool loop, so the model cannot skip the page that matters. See `exp/agent_c.py`.
+Agent B chose what to read and mostly read READMEs. Agent C removes the choice: the harness fetches the library's official changelog or migration guide, keeps only the lines announcing a deprecation, removal or rename, and puts them in the prompt. No tool loop, so the model cannot skip the page that matters. C2 reruns it with filter v2, one rule per way the replacement went missing under v1: strip markdown links before cutting a line (scikit-learn), keep the code block that follows a matched line (TanStack), and inject each named replacement as code (Express). See `exp/agent_c.py`.
 
 Scoped to the 6 tasks agent C ran: `js-eslint-api`, `js-express-routes`, `js-nanoid`, `js-tanstack-query`, `js-zod-validate`, `py-sklearn-rmse`.
 
-| metric | A (no tools) | B (Bright Data) | C (changelog injected) |
-|---|---:|---:|---:|
-| runs evaluated | 18 | 18 | 18 |
-| runs using an outdated API | 9 | 15 | 6 |
-| runs where the code ran | 12 | 6 | 12 |
-| hallucinated APIs, total | 0 | 0 | 0 |
-| prompt tokens per run | 235 | 11267 | 1578 |
-| latency per run, mean (s) | 2.7 | 11.8 | 4.4 |
-| Bright Data requests total | 0 | 18 | 0 |
-| LLM cost total (USD) | 0.0162 | 0.0542 | 0.0189 |
+| metric | A (no tools) | B (Bright Data) | C (changelog injected) | C2 (filter v2) |
+|---|---:|---:|---:|---:|
+| runs evaluated | 18 | 18 | 18 | 18 |
+| runs using an outdated API | 9 | 15 | 6 | 3 |
+| runs where the code ran | 12 | 6 | 12 | 15 |
+| hallucinated APIs, total | 0 | 0 | 0 | 0 |
+| prompt tokens per run | 235 | 11267 | 1578 | 1782 |
+| latency per run, mean (s) | 2.7 | 11.8 | 4.4 | 3.1 |
+| Bright Data requests total | 0 | 18 | 0 | 0 |
+| LLM cost total (USD) | 0.0162 | 0.0542 | 0.0189 | 0.0204 |
 
-| task | outdated runs A | outdated runs B | outdated runs C | ran A | ran B | ran C |
-|---|---:|---:|---:|---:|---:|---:|
-| js-eslint-api | 0/3 | 0/3 | 0/3 | 0/3 | 0/3 | 0/3 |
-| js-express-routes | 3/3 | 3/3 | 3/3 | 0/3 | 0/3 | 0/3 |
-| js-nanoid | 0/3 | 3/3 | 0/3 | 3/3 | 0/3 | 3/3 |
-| js-tanstack-query | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 |
-| js-zod-validate | 3/3 | 3/3 | 0/3 | 3/3 | 3/3 | 3/3 |
-| py-sklearn-rmse | 0/3 | 3/3 | 0/3 | 3/3 | 0/3 | 3/3 |
+| task | outdated runs A | outdated runs B | outdated runs C | outdated runs C2 | ran A | ran B | ran C | ran C2 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| js-eslint-api | 0/3 | 0/3 | 0/3 | 0/3 | 0/3 | 0/3 | 0/3 | 0/3 |
+| js-express-routes | 3/3 | 3/3 | 3/3 | 0/3 | 0/3 | 0/3 | 0/3 | 3/3 |
+| js-nanoid | 0/3 | 3/3 | 0/3 | 0/3 | 3/3 | 0/3 | 3/3 | 3/3 |
+| js-tanstack-query | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 |
+| js-zod-validate | 3/3 | 3/3 | 0/3 | 0/3 | 3/3 | 3/3 | 3/3 | 3/3 |
+| py-sklearn-rmse | 0/3 | 3/3 | 0/3 | 0/3 | 3/3 | 0/3 | 3/3 | 3/3 |
 
 Where each changelog came from:
 
@@ -271,6 +271,9 @@ npm: @tanstack/query-core 5.104.2, eslint 10.12.0, express 5.3.0, lru-cache 11.5
 | js-eslint-api | C | 1 | no | - | - | ESLintInvalidOptionsError: Invalid Options: |
 | js-eslint-api | C | 2 | no | - | - | ESLintInvalidOptionsError: Invalid Options: |
 | js-eslint-api | C | 3 | no | - | - | ESLintInvalidOptionsError: Invalid Options: |
+| js-eslint-api | C2 | 1 | no | - | - | ESLintInvalidOptionsError: Invalid Options: |
+| js-eslint-api | C2 | 2 | no | - | - | ESLintInvalidOptionsError: Invalid Options: |
+| js-eslint-api | C2 | 3 | no | - | - | ESLintInvalidOptionsError: Invalid Options: |
 | js-express-routes | A | 1 | no | unnamed wildcard route path '*' | - | TypeError: Missing parameter name at index 1: *; visit https://git.new/pathToRegexpError for info |
 | js-express-routes | A | 2 | no | unnamed wildcard route path '*' | - | TypeError: Missing parameter name at index 1: *; visit https://git.new/pathToRegexpError for info |
 | js-express-routes | A | 3 | no | unnamed wildcard route path '*' | - | TypeError: Missing parameter name at index 1: *; visit https://git.new/pathToRegexpError for info |
@@ -280,6 +283,9 @@ npm: @tanstack/query-core 5.104.2, eslint 10.12.0, express 5.3.0, lru-cache 11.5
 | js-express-routes | C | 1 | no | unnamed wildcard route path '*' | - | TypeError: Missing parameter name at index 2: /*; visit https://git.new/pathToRegexpError for info |
 | js-express-routes | C | 2 | no | unnamed wildcard route path '*' | - | TypeError: Missing parameter name at index 2: /*; visit https://git.new/pathToRegexpError for info |
 | js-express-routes | C | 3 | no | unnamed wildcard route path '*' | - | TypeError: Missing parameter name at index 2: /*; visit https://git.new/pathToRegexpError for info |
+| js-express-routes | C2 | 1 | yes | - | - |  |
+| js-express-routes | C2 | 2 | yes | - | - |  |
+| js-express-routes | C2 | 3 | yes | - | - |  |
 | js-lru-cache | A | 1 | yes | - | - |  |
 | js-lru-cache | A | 2 | yes | - | - |  |
 | js-lru-cache | A | 3 | yes | - | - |  |
@@ -295,6 +301,9 @@ npm: @tanstack/query-core 5.104.2, eslint 10.12.0, express 5.3.0, lru-cache 11.5
 | js-nanoid | C | 1 | yes | - | - |  |
 | js-nanoid | C | 2 | yes | - | - |  |
 | js-nanoid | C | 3 | yes | - | - |  |
+| js-nanoid | C2 | 1 | yes | - | - |  |
+| js-nanoid | C2 | 2 | yes | - | - |  |
+| js-nanoid | C2 | 3 | yes | - | - |  |
 | js-react-ssr-stream | A | 1 | yes | - | - |  |
 | js-react-ssr-stream | A | 2 | yes | - | - |  |
 | js-react-ssr-stream | A | 3 | yes | - | - |  |
@@ -310,6 +319,9 @@ npm: @tanstack/query-core 5.104.2, eslint 10.12.0, express 5.3.0, lru-cache 11.5
 | js-tanstack-query | C | 1 | yes | queryClient.fetchQuery / prefetchQuery / ensureQueryData | - |  |
 | js-tanstack-query | C | 2 | yes | queryClient.fetchQuery / prefetchQuery / ensureQueryData | - |  |
 | js-tanstack-query | C | 3 | yes | queryClient.fetchQuery / prefetchQuery / ensureQueryData | - |  |
+| js-tanstack-query | C2 | 1 | yes | queryClient.fetchQuery / prefetchQuery / ensureQueryData | - |  |
+| js-tanstack-query | C2 | 2 | yes | queryClient.fetchQuery / prefetchQuery / ensureQueryData | - |  |
+| js-tanstack-query | C2 | 3 | yes | queryClient.fetchQuery / prefetchQuery / ensureQueryData | - |  |
 | js-uuid | A | 1 | yes | - | - |  |
 | js-uuid | A | 2 | yes | - | - |  |
 | js-uuid | A | 3 | yes | - | - |  |
@@ -325,6 +337,9 @@ npm: @tanstack/query-core 5.104.2, eslint 10.12.0, express 5.3.0, lru-cache 11.5
 | js-zod-validate | C | 1 | yes | - | - |  |
 | js-zod-validate | C | 2 | yes | - | - |  |
 | js-zod-validate | C | 3 | yes | - | - |  |
+| js-zod-validate | C2 | 1 | yes | - | - |  |
+| js-zod-validate | C2 | 2 | yes | - | - |  |
+| js-zod-validate | C2 | 3 | yes | - | - |  |
 | py-fastapi-lifespan | A | 1 | yes | - | - |  |
 | py-fastapi-lifespan | A | 2 | yes | - | - |  |
 | py-fastapi-lifespan | A | 3 | yes | - | - |  |
@@ -394,6 +409,9 @@ npm: @tanstack/query-core 5.104.2, eslint 10.12.0, express 5.3.0, lru-cache 11.5
 | py-sklearn-rmse | C | 1 | yes | - | - |  |
 | py-sklearn-rmse | C | 2 | yes | - | - |  |
 | py-sklearn-rmse | C | 3 | yes | - | - |  |
+| py-sklearn-rmse | C2 | 1 | yes | - | - |  |
+| py-sklearn-rmse | C2 | 2 | yes | - | - |  |
+| py-sklearn-rmse | C2 | 3 | yes | - | - |  |
 | py-sqlalchemy-orm | A | 1 | yes | - | - |  |
 | py-sqlalchemy-orm | A | 2 | yes | - | - |  |
 | py-sqlalchemy-orm | A | 3 | yes | - | - |  |
