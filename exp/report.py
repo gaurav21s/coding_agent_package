@@ -18,12 +18,17 @@ FIELDS = ["task_id", "ecosystem", "package", "agent", "run", "model", "code_extr
           "bd_cache_hits", "latency_s", "cost_usd", "stop_reason", "gt_items_hit", "hallucinated_symbols",
           "error_message"]
 
+# A: no tools. B: model-chosen Bright Data tools. C: harness-injected changelog (exp/agent_c.py).
+# C only ran on the tasks B got wrong, so it is never averaged against A and B over all 20.
+AGENTS = ("A", "B", "C")
+AGENT_LABEL = {"A": "A (no tools)", "B": "B (Bright Data)", "C": "C (changelog injected)"}
+
 
 def collect() -> list[dict]:
     tasks = {t["id"]: t for t in json.loads(config.TASKS_FILE.read_text())["tasks"]}
     rows = []
     for tid, task in tasks.items():
-        for agent in ("A", "B"):
+        for agent in AGENTS:
             for d in sorted((config.RUNS_DIR / tid / agent).glob("run*")):
                 if not (d / "agent.json").exists() or not (d / "eval.json").exists():
                     continue
@@ -92,6 +97,62 @@ def overall_table(rows: list[dict]) -> list[str]:
         b = fn(by["B"]) if by["B"] else float("nan")
         diff = b - a if (a == a and b == b) else float("nan")
         out.append(f"| {name} | {_fmt(a, d)} | {_fmt(b, d)} | {_fmt(diff, d)} |")
+    return out
+
+
+def changelog_table(rows: list[dict]) -> list[str]:
+    """A vs B vs C restricted to the tasks agent C actually ran.
+
+    Agent C was built after the first results, to test whether fetching the
+    changelog in code (rather than letting the model choose what to read) fixes
+    the libraries agent B got wrong. It ran only on those, so this table is
+    scoped to them; comparing C's mean against a 20-task mean would flatter it.
+    """
+    c_tasks = sorted({r["task_id"] for r in rows if r["agent"] == "C"})
+    if not c_tasks:
+        return []
+    sub = [r for r in rows if r["task_id"] in c_tasks]
+    by = {a: [r for r in sub if r["agent"] == a] for a in AGENTS}
+    metrics = [
+        ("runs evaluated", lambda rs: len(rs), 0),
+        ("runs using an outdated API", lambda rs: sum(r["deprecated_any"] for r in rs), 0),
+        ("runs where the code ran", lambda rs: sum(bool(r["runs"]) for r in rs), 0),
+        ("hallucinated APIs, total", lambda rs: sum(r["hallucinated"] for r in rs), 0),
+        ("prompt tokens per run", lambda rs: _mean([r["prompt_tokens"] for r in rs]), 0),
+        ("latency per run, mean (s)", lambda rs: _mean([r["latency_s"] for r in rs]), 1),
+        ("Bright Data requests total", lambda rs: sum(r["bd_requests"] for r in rs), 0),
+        ("LLM cost total (USD)", lambda rs: sum(r["cost_usd"] for r in rs), 4),
+    ]
+    out = [f"Scoped to the {len(c_tasks)} tasks agent C ran: " + ", ".join(f"`{t}`" for t in c_tasks) + ".", "",
+           "| metric | " + " | ".join(AGENT_LABEL[a] for a in AGENTS) + " |",
+           "|---|" + "---:|" * len(AGENTS)]
+    for name, fn, d in metrics:
+        cells = [_fmt(fn(by[a]), d) if by[a] else "n/a" for a in AGENTS]
+        out.append(f"| {name} | " + " | ".join(cells) + " |")
+    out += ["", "| task | outdated runs A | outdated runs B | outdated runs C | ran A | ran B | ran C |",
+            "|---|---:|---:|---:|---:|---:|---:|"]
+    for tid in c_tasks:
+        cells = []
+        for key in ("deprecated_any", "runs"):
+            for a in AGENTS:
+                rs = [r for r in sub if r["task_id"] == tid and r["agent"] == a]
+                cells.append(f"{sum(bool(r[key]) for r in rs)}/{len(rs)}" if rs else "n/a")
+        out.append(f"| {tid} | " + " | ".join(cells) + " |")
+    return out
+
+
+def changelog_sources() -> list[str]:
+    """How agent C fetched each changelog, and how much survived the filter."""
+    rows = []
+    for f in sorted(config.RUNS_DIR.glob("*/C/run1/agent.json")):
+        a = json.loads(f.read_text())
+        rows.append((a["task_id"], a.get("changelog_source", "?"),
+                     a.get("changelog_kept_chars", 0), a.get("changelog_url", "")))
+    if not rows:
+        return []
+    out = ["| task | fetched via | change lines kept (chars) | source |", "|---|---|---:|---|"]
+    for tid, how, kept, url in rows:
+        out.append(f"| {tid} | `{how}` | {kept:,} | {url} |")
     return out
 
 
@@ -254,6 +315,17 @@ def main() -> None:
         md += ["## What agent B fetched", "", "Tool calls across all B runs (refused = unknown tool or a dataset outside the "
                "three enabled ones):", ""] + tool_usage() + [""]
         md += ["What the unique (cached) Bright Data responses contained:", ""] + data_quality() + [""]
+
+    cl = changelog_table(rows)
+    if cl:
+        md += ["## Agent C: fetching the changelog in code", "",
+               "Agent B chose what to read and mostly read READMEs. Agent C removes the choice: the harness fetches the "
+               "library's official changelog or migration guide, keeps only the lines announcing a deprecation, removal or "
+               "rename, and puts them in the prompt. No tool loop, so the model cannot skip the page that matters. "
+               "See `exp/agent_c.py`.", ""] + cl + [""]
+        src = changelog_sources()
+        if src:
+            md += ["Where each changelog came from:", ""] + src + [""]
 
     md += ["## Ground truth sources", "", "| task | deprecated | replacement | source |", "|---|---|---|---|"]
     for t in tasks:

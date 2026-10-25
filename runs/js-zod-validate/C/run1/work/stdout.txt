@@ -1,0 +1,39 @@
+--- Valid Signup ---
+Success: true
+
+--- Invalid Signup ---
+Individual Issues:
+Path: email, Message: Invalid email address
+Path: password, Message: Too small: expected string to have >=8 characters
+Path: age, Message: Too small: expected number to be >=13
+
+Grouped Errors (Treeified):
+{
+  "errors": [],
+  "properties": {
+    "email": {
+      "errors": [
+        "Invalid email address"
+      ]
+    },
+    "password": {
+      "errors": [
+        "Too small: expected string to have >=8 characters"
+      ]
+    },
+    "age": {
+      "errors": [
+        "Too small: expected number to be >=13"
+      ]
+    }
+  }
+}
+
+--- Admin Signup ---
+Admin Success: true
+Admin Data: {
+  email: 'admin@example.com',
+  password: 'securepassword',
+  age: 30,
+  role: 'admin'
+}

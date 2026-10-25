@@ -1,0 +1,29 @@
+{
+ "agent": "C",
+ "task_id": "js-eslint-api",
+ "model": "google/gemini-3.1-flash-lite",
+ "stop_reason": "answered",
+ "code": "import { ESLint } from \"eslint\";\n\n/**\n * Program to lint a code string using ESLint's Flat Config API.\n * Uses the ESLint class as per the current stable API.\n */\nasync function runLint() {\n  const code = \"var x = 1; if (x == 2) {}\";\n\n  // Initialize ESLint with Flat Config\n  // useEslintrc: false ensures no config files are loaded from the filesystem\n  const eslint = new ESLint({\n    useEslintrc: false,\n    overrideConfig: [\n      {\n        rules: {\n          \"no-var\": \"error\",\n          \"eqeqeq\": \"error\"\n        }\n      }\n    ]\n  });\n\n  try {\n    // Lint the provided text\n    const results = await eslint.lintText(code);\n\n    // Iterate through results and print ruleId and line number\n    results.forEach((result) => {\n      result.messages.forEach((msg) => {\n        console.log(`ruleId: ${msg.ruleId}, line: ${msg.line}`);\n      });\n    });\n  } catch (error) {\n    console.error(\"Error during linting:\", error);\n  }\n}\n\nrunLint();\n",
+ "tool_log": [
+  {
+   "tool": "scrape_as_markdown",
+   "args": {
+    "url": "https://eslint.org/docs/latest/use/migrate-to-8.0.0"
+   },
+   "chars": 26545,
+   "kept_chars": 4233
+  }
+ ],
+ "changelog_source": "scrape_as_markdown",
+ "changelog_url": "https://eslint.org/docs/latest/use/migrate-to-8.0.0",
+ "changelog_kept_chars": 4233,
+ "prompt_tokens": 1458,
+ "completion_tokens": 380,
+ "cost_usd": 0.0009345,
+ "llm_calls": 1,
+ "tool_calls": 1,
+ "tool_errors": 0,
+ "bd_requests": 0,
+ "bd_cache_hits": 0,
+ "latency_s": 2.46
+}

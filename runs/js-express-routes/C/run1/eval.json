@@ -1,0 +1,22 @@
+{
+ "code_extracted": true,
+ "deprecated_static": 2,
+ "deprecated_static_items": {
+  "unnamed wildcard route path '*'": 2
+ },
+ "runs": false,
+ "timeout": false,
+ "strict_runs": false,
+ "strict_failed_on_deprecation": false,
+ "deprecated_runtime": 1,
+ "deprecation_warnings": [],
+ "removed_api_errors": 1,
+ "hallucinated": 0,
+ "hallucinated_symbols": [],
+ "removed_api_symbols": [],
+ "error_type": "TypeError",
+ "error_message": "Missing parameter name at index 2: /*; visit https://git.new/pathToRegexpError for info",
+ "gt_items_hit": [
+  "unnamed wildcard route path '*'"
+ ]
+}

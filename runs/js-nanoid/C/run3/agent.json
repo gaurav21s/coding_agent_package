@@ -1,0 +1,29 @@
+{
+ "agent": "C",
+ "task_id": "js-nanoid",
+ "model": "google/gemini-3.1-flash-lite",
+ "stop_reason": "answered",
+ "code": "import { nanoid, customAlphabet } from 'nanoid';\n\n/**\n * Program: main.mjs\n * Description: Generates IDs using nanoid v5.0.9.\n * Note: As per nanoid v4+ changelog, the async API has been removed \n * as the underlying Web Crypto API is synchronous.\n */\n\nasync function run() {\n    // 1. Default-length ID (21 characters)\n    const defaultId = nanoid();\n\n    // 2. 10-character ID\n    const tenCharId = nanoid(10);\n\n    // 3. 6-character ID made only of digits\n    const digits = '0123456789';\n    const nanoidDigits = customAlphabet(digits, 6);\n    const customId = nanoidDigits();\n\n    // Output results\n    const results = [\n        { label: 'Default-length ID', id: defaultId },\n        { label: '10-character ID', id: tenCharId },\n        { label: '6-character digit ID', id: customId }\n    ];\n\n    results.forEach(item => {\n        console.log(`${item.label}: ${item.id} (Length: ${item.id.length})`);\n    });\n}\n\nrun().catch(err => console.error(err));\n",
+ "tool_log": [
+  {
+   "tool": "run_scraper/github_file",
+   "args": {
+    "url": "https://github.com/ai/nanoid/blob/main/CHANGELOG.md"
+   },
+   "chars": 9748,
+   "kept_chars": 738
+  }
+ ],
+ "changelog_source": "run_scraper/github_file",
+ "changelog_url": "https://github.com/ai/nanoid/blob/main/CHANGELOG.md",
+ "changelog_kept_chars": 738,
+ "prompt_tokens": 508,
+ "completion_tokens": 431,
+ "cost_usd": 0.0007735,
+ "llm_calls": 1,
+ "tool_calls": 1,
+ "tool_errors": 0,
+ "bd_requests": 0,
+ "bd_cache_hits": 0,
+ "latency_s": 2.28
+}

@@ -1,6 +1,6 @@
 # Does live package data reduce deprecated and hallucinated API use?
 
-Model: `google/gemini-3.1-flash-lite` at temperature 0, same system prompt for both agents. 20 tasks, up to 3 runs per task per agent. Bright Data requests used (all time, from cache/bd_usage.json): 60 of a 2000 cap.
+Model: `google/gemini-3.1-flash-lite` at temperature 0, same system prompt for both agents. 20 tasks, up to 3 runs per task per agent. Bright Data requests used (all time, from cache/bd_usage.json): 69 of a 2000 cap.
 
 ## A vs B, all tasks
 
@@ -142,10 +142,48 @@ What the unique (cached) Bright Data responses contained:
 
 | source | unique fetches | with version | with README / file content | empty record | mean chars |
 |---|---:|---:|---:|---:|---:|
-| github_file scraper | 1 | 0 | 1 | 0 | |
+| github_file scraper | 2 | 0 | 2 | 0 | |
 | npm scraper | 12 | 12 | 12 | 0 | |
 | pypi scraper | 10 | 0 | 5 | 5 | |
-| scrape_as_markdown | 19 | | | | 32,821 |
+| scrape_as_markdown | 24 | | | | 36,125 |
+| search_engine | 1 | | | | 2,483 |
+
+## Agent C: fetching the changelog in code
+
+Agent B chose what to read and mostly read READMEs. Agent C removes the choice: the harness fetches the library's official changelog or migration guide, keeps only the lines announcing a deprecation, removal or rename, and puts them in the prompt. No tool loop, so the model cannot skip the page that matters. See `exp/agent_c.py`.
+
+Scoped to the 6 tasks agent C ran: `js-eslint-api`, `js-express-routes`, `js-nanoid`, `js-tanstack-query`, `js-zod-validate`, `py-sklearn-rmse`.
+
+| metric | A (no tools) | B (Bright Data) | C (changelog injected) |
+|---|---:|---:|---:|
+| runs evaluated | 18 | 18 | 18 |
+| runs using an outdated API | 9 | 15 | 6 |
+| runs where the code ran | 12 | 6 | 12 |
+| hallucinated APIs, total | 0 | 0 | 0 |
+| prompt tokens per run | 235 | 11267 | 1578 |
+| latency per run, mean (s) | 2.7 | 11.8 | 4.4 |
+| Bright Data requests total | 0 | 18 | 0 |
+| LLM cost total (USD) | 0.0162 | 0.0542 | 0.0189 |
+
+| task | outdated runs A | outdated runs B | outdated runs C | ran A | ran B | ran C |
+|---|---:|---:|---:|---:|---:|---:|
+| js-eslint-api | 0/3 | 0/3 | 0/3 | 0/3 | 0/3 | 0/3 |
+| js-express-routes | 3/3 | 3/3 | 3/3 | 0/3 | 0/3 | 0/3 |
+| js-nanoid | 0/3 | 3/3 | 0/3 | 3/3 | 0/3 | 3/3 |
+| js-tanstack-query | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 |
+| js-zod-validate | 3/3 | 3/3 | 0/3 | 3/3 | 3/3 | 3/3 |
+| py-sklearn-rmse | 0/3 | 3/3 | 0/3 | 3/3 | 0/3 | 3/3 |
+
+Where each changelog came from:
+
+| task | fetched via | change lines kept (chars) | source |
+|---|---|---:|---|
+| js-eslint-api | `scrape_as_markdown` | 4,233 | https://eslint.org/docs/latest/use/migrate-to-8.0.0 |
+| js-express-routes | `scrape_as_markdown` | 6,027 | https://expressjs.com/en/guide/migrating-5.html |
+| js-nanoid | `run_scraper/github_file` | 738 | https://github.com/ai/nanoid/blob/main/CHANGELOG.md |
+| js-tanstack-query | `scrape_as_markdown` | 6,108 | https://tanstack.com/query/latest/docs/framework/react/guides/migrating-to-v5 |
+| js-zod-validate | `scrape_as_markdown` | 6,112 | https://zod.dev/v4/changelog |
+| py-sklearn-rmse | `scrape_as_markdown` | 6,227 | https://scikit-learn.org/stable/whats_new/v1.4.html |
 
 ## Ground truth sources
 
@@ -230,12 +268,18 @@ npm: @tanstack/query-core 5.104.2, eslint 10.12.0, express 5.3.0, lru-cache 11.5
 | js-eslint-api | B | 1 | no | - | - | ESLintInvalidOptionsError: Invalid Options: |
 | js-eslint-api | B | 2 | no | - | - | ESLintInvalidOptionsError: Invalid Options: |
 | js-eslint-api | B | 3 | no | - | - | ESLintInvalidOptionsError: Invalid Options: |
+| js-eslint-api | C | 1 | no | - | - | ESLintInvalidOptionsError: Invalid Options: |
+| js-eslint-api | C | 2 | no | - | - | ESLintInvalidOptionsError: Invalid Options: |
+| js-eslint-api | C | 3 | no | - | - | ESLintInvalidOptionsError: Invalid Options: |
 | js-express-routes | A | 1 | no | unnamed wildcard route path '*' | - | TypeError: Missing parameter name at index 1: *; visit https://git.new/pathToRegexpError for info |
 | js-express-routes | A | 2 | no | unnamed wildcard route path '*' | - | TypeError: Missing parameter name at index 1: *; visit https://git.new/pathToRegexpError for info |
 | js-express-routes | A | 3 | no | unnamed wildcard route path '*' | - | TypeError: Missing parameter name at index 1: *; visit https://git.new/pathToRegexpError for info |
 | js-express-routes | B | 1 | no | unnamed wildcard route path '*' | - | TypeError: Missing parameter name at index 1: *; visit https://git.new/pathToRegexpError for info |
 | js-express-routes | B | 2 | no | unnamed wildcard route path '*' | - | TypeError: Missing parameter name at index 1: *; visit https://git.new/pathToRegexpError for info |
 | js-express-routes | B | 3 | no | unnamed wildcard route path '*' | - | TypeError: Missing parameter name at index 1: *; visit https://git.new/pathToRegexpError for info |
+| js-express-routes | C | 1 | no | unnamed wildcard route path '*' | - | TypeError: Missing parameter name at index 2: /*; visit https://git.new/pathToRegexpError for info |
+| js-express-routes | C | 2 | no | unnamed wildcard route path '*' | - | TypeError: Missing parameter name at index 2: /*; visit https://git.new/pathToRegexpError for info |
+| js-express-routes | C | 3 | no | unnamed wildcard route path '*' | - | TypeError: Missing parameter name at index 2: /*; visit https://git.new/pathToRegexpError for info |
 | js-lru-cache | A | 1 | yes | - | - |  |
 | js-lru-cache | A | 2 | yes | - | - |  |
 | js-lru-cache | A | 3 | yes | - | - |  |
@@ -248,6 +292,9 @@ npm: @tanstack/query-core 5.104.2, eslint 10.12.0, express 5.3.0, lru-cache 11.5
 | js-nanoid | B | 1 | no | nanoid/async | - | ERR_PACKAGE_PATH_NOT_EXPORTED: Package subpath './async' is not defined by "exports" in /Users/Admin/Documents/New projec |
 | js-nanoid | B | 2 | no | nanoid/async | - | ERR_PACKAGE_PATH_NOT_EXPORTED: Package subpath './async' is not defined by "exports" in /Users/Admin/Documents/New projec |
 | js-nanoid | B | 3 | no | nanoid/async | - | ERR_PACKAGE_PATH_NOT_EXPORTED: Package subpath './async' is not defined by "exports" in /Users/Admin/Documents/New projec |
+| js-nanoid | C | 1 | yes | - | - |  |
+| js-nanoid | C | 2 | yes | - | - |  |
+| js-nanoid | C | 3 | yes | - | - |  |
 | js-react-ssr-stream | A | 1 | yes | - | - |  |
 | js-react-ssr-stream | A | 2 | yes | - | - |  |
 | js-react-ssr-stream | A | 3 | yes | - | - |  |
@@ -260,6 +307,9 @@ npm: @tanstack/query-core 5.104.2, eslint 10.12.0, express 5.3.0, lru-cache 11.5
 | js-tanstack-query | B | 1 | yes | queryClient.fetchQuery / prefetchQuery / ensureQueryData | - |  |
 | js-tanstack-query | B | 2 | yes | queryClient.fetchQuery / prefetchQuery / ensureQueryData | - |  |
 | js-tanstack-query | B | 3 | yes | queryClient.fetchQuery / prefetchQuery / ensureQueryData | - |  |
+| js-tanstack-query | C | 1 | yes | queryClient.fetchQuery / prefetchQuery / ensureQueryData | - |  |
+| js-tanstack-query | C | 2 | yes | queryClient.fetchQuery / prefetchQuery / ensureQueryData | - |  |
+| js-tanstack-query | C | 3 | yes | queryClient.fetchQuery / prefetchQuery / ensureQueryData | - |  |
 | js-uuid | A | 1 | yes | - | - |  |
 | js-uuid | A | 2 | yes | - | - |  |
 | js-uuid | A | 3 | yes | - | - |  |
@@ -272,6 +322,9 @@ npm: @tanstack/query-core 5.104.2, eslint 10.12.0, express 5.3.0, lru-cache 11.5
 | js-zod-validate | B | 1 | yes | ZodError.flatten(); z.string().email() | - |  |
 | js-zod-validate | B | 2 | yes | ZodError.flatten(); z.string().email() | - |  |
 | js-zod-validate | B | 3 | yes | ZodError.flatten(); z.string().email() | - |  |
+| js-zod-validate | C | 1 | yes | - | - |  |
+| js-zod-validate | C | 2 | yes | - | - |  |
+| js-zod-validate | C | 3 | yes | - | - |  |
 | py-fastapi-lifespan | A | 1 | yes | - | - |  |
 | py-fastapi-lifespan | A | 2 | yes | - | - |  |
 | py-fastapi-lifespan | A | 3 | yes | - | - |  |
@@ -338,6 +391,9 @@ npm: @tanstack/query-core 5.104.2, eslint 10.12.0, express 5.3.0, lru-cache 11.5
 | py-sklearn-rmse | B | 1 | no | mean_squared_error(..., squared=False) | - | TypeError: got an unexpected keyword argument 'squared' |
 | py-sklearn-rmse | B | 2 | no | mean_squared_error(..., squared=False) | - | TypeError: got an unexpected keyword argument 'squared' |
 | py-sklearn-rmse | B | 3 | no | mean_squared_error(..., squared=False) | - | TypeError: got an unexpected keyword argument 'squared' |
+| py-sklearn-rmse | C | 1 | yes | - | - |  |
+| py-sklearn-rmse | C | 2 | yes | - | - |  |
+| py-sklearn-rmse | C | 3 | yes | - | - |  |
 | py-sqlalchemy-orm | A | 1 | yes | - | - |  |
 | py-sqlalchemy-orm | A | 2 | yes | - | - |  |
 | py-sqlalchemy-orm | A | 3 | yes | - | - |  |

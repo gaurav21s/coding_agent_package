@@ -1,0 +1,18 @@
+{
+ "code_extracted": true,
+ "deprecated_static": 0,
+ "deprecated_static_items": {},
+ "runs": false,
+ "timeout": false,
+ "strict_runs": false,
+ "strict_failed_on_deprecation": false,
+ "deprecated_runtime": 0,
+ "deprecation_warnings": [],
+ "removed_api_errors": 0,
+ "hallucinated": 0,
+ "hallucinated_symbols": [],
+ "removed_api_symbols": [],
+ "error_type": "ESLintInvalidOptionsError",
+ "error_message": "Invalid Options:",
+ "gt_items_hit": []
+}
